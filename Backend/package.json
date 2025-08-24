@@ -1,0 +1,35 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "DLD Backend",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "keywords": [
+    "Next.Js",
+    "Node.Js"
+  ],
+  "author": "Faisal Raza",
+  "license": "ISC",
+  "dependencies": {
+    "agenda": "^5.0.0",
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "moment-timezone": "^0.6.0",
+    "mongoose": "^8.17.1",
+    "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^7.0.5",
+    "nodemon": "^3.1.10",
+    "react-phone-number-input": "^3.4.12",
+    "socket.io": "^4.8.1"
+  }
+}

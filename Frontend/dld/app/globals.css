@@ -1,0 +1,18 @@
+@import "tailwindcss";
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+html {
+  @apply bg-white text-zinc-900;
+}
+html.dark {
+  @apply bg-zinc-950 text-zinc-100;
+}
+
+
+/* You can set default font via Tailwind */
+body {
+  @apply font-sans;
+}
+
