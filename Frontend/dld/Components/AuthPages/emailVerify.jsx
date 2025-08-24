@@ -83,7 +83,7 @@ const emailVerify = () => {
                 onSubmit={onVerify}
                 className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"
             >
-                <Link href={isEditProfile ? "/dashboard" : "/register"}>
+                <Link href={isEditProfile ? "/dashboard" : "/signUp"}>
                     <button
                         type="button"
                         className="mb-4 inline-flex items-center gap-2 text-sm text-zinc-600 hover:underline dark:text-zinc-400"
