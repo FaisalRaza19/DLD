@@ -32,5 +32,5 @@ DLD is a **modern web application** designed for **lawyers, clients, and law fir
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/your-username/dld-web-app.git
+git clone https://github.com/FaisalRaza19/dld-web-app.git
 cd dld-web-app
