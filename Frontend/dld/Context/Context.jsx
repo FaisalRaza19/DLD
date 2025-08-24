@@ -19,7 +19,7 @@ import {
 import { useRouter } from "next/navigation.js"
 
 export function AppProvider({ children }) {
-    const url = process.env.NEXT_PUBLIC_BACKEND_SERVER_URL || "http://localhost:6755"
+    const url = process.env.NEXT_PUBLIC_BACKEND_SERVER_URL
     const router = useRouter()
 
     const [isEditProfile, setIsEditProfile] = useState(false)
