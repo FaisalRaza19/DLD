@@ -6,6 +6,7 @@ import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
 import jwt from "jsonwebtoken";
+import MongoStore from "conn"
 
 import { router as userRoutes } from "./Routes/user.route.js";
 import { Case } from "./Routes/case.route.js";
@@ -84,11 +85,10 @@ app.use(session({
     secret: process.env.SESSION_SECRET || "fallback-secret",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
     cookie: {
         maxAge: 10 * 60 * 1000,
-        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
     },
 }));
 

@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from "react"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { useApp } from "@/Context/Context.jsx"
 import { FiArrowLeft } from "react-icons/fi"
 
@@ -9,6 +9,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const signUp = () => {
     const router = useRouter()
+    const pathName = usePathname()
     const { addAlert, userAuth } = useApp()
     const { register } = userAuth
 
@@ -94,7 +95,7 @@ const signUp = () => {
                 {/* Back */}
                 <button
                     type="button"
-                    onClick={() => router.back()}
+                    onClick={() => pathName === "/signUp" ? router.push("/login") : router.back()}
                     className="mb-4 inline-flex items-center gap-2 text-sm text-zinc-600 hover:underline dark:text-zinc-400"
                 >
                     <FiArrowLeft /> Back
