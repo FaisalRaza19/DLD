@@ -10,7 +10,6 @@ export const register = async (formData) => {
             credentials: "include"
         });
 
-        console.log(response)
         if (!response.ok) {
             const errorDetails = await response.json();
             return { message: errorDetails.message.message || errorDetails.message };
@@ -31,8 +30,6 @@ export const verify_register = async ({ code }) => {
             body: JSON.stringify({ code }),
             credentials: 'include',
         });
-
-        console.log(response)
 
         if (!response.ok) {
             const errorDetails = await response.json();
