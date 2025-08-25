@@ -21,9 +21,11 @@ connectToDb();
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = process.env.CORS_ORIGINS.split(",").map(o => o.trim());
+
 const io = new Server(server, {
     cors: {
-        origin:[process.env.CORS_ORIGINS],
+        origin: allowedOrigins,
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
         allowedHeaders: ["Content-Type", "Authorization", "token", "X-Requested-With"],
         credentials: true,
@@ -66,7 +68,12 @@ app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ limit: "100mb", extended: true }));
 
 app.use(cors({
-    origin: [process.env.CORS_ORIGINS],
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error("Not allowed by CORS"));
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "token", "X-Requested-With"],
     credentials: true,
@@ -104,7 +111,7 @@ app.use("/hearings", hearing);
 })();
 
 const PORT = process.env.PORT || 8000;
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 server.listen(PORT, () => {
-    console.log(`Server is running on https://localhost:${PORT}`);
+    console.log(`Server is running on ${BASE_URL}`);
 });
-
