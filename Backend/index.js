@@ -127,5 +127,6 @@ app.use("/hearings", hearing);
 
 // Start server
 const PORT = process.env.PORT || 8000;
-server.listen(PORT, () => { console.log(`Server is running on ${process.env.BASE_URL}`); });
-
+server.listen(PORT, () => {
+    console.log(`Server is running on ${process.env.BASE_URL || `http://localhost:${PORT}`}`);
+});
