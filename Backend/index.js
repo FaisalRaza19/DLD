@@ -22,21 +22,29 @@ dotenv.config({ path: ".env" });
 connectToDb();
 
 const app = express();
+if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1); // trust first proxy (Railway)
+}
 const server = http.createServer(app);
 
 // Allowed CORS origins
-const allowedOrigins = process.env.CORS_ORIGINS.split(",").map(o => o.trim());
+const allowedOrigins = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(",").map(o => o.trim()).filter(Boolean) : [];
 
 // Socket.IO setup
 const io = new Server(server, {
     cors: {
-        origin: allowedOrigins,
+        origin: (origin, cb) => {
+            if (!origin) return cb(null, true);
+            return allowedOrigins.length === 0
+                ? cb(null, true)
+                : cb(null, allowedOrigins.includes(origin));
+        },
         methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
         allowedHeaders: ["Content-Type", "Authorization", "token", "X-Requested-With"],
         credentials: true,
-        optionsSuccessStatus: 200,
     },
 });
+
 
 // Attach io to request object
 app.use((req, res, next) => {
@@ -73,13 +81,15 @@ app.use(express.urlencoded({ limit: "100mb", extended: true }));
 
 app.use(cors({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-        return callback(new Error("Not allowed by CORS"));
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.length === 0) return callback(null, true);
+        return allowedOrigins.includes(origin) ? callback(null, true) : callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "token", "X-Requested-With"],
 }));
+
 
 // Session setup with MongoDB store (works on serverless)
 app.use(session({
@@ -117,7 +127,5 @@ app.use("/hearings", hearing);
 
 // Start server
 const PORT = process.env.PORT || 8000;
-const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
-server.listen(PORT, () => {
-    console.log(`Server is running on ${BASE_URL}`);
-});
+server.listen(PORT, () => { console.log(`Server is running on ${process.env.BASE_URL}`); });
+
