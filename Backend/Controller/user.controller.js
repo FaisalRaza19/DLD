@@ -40,6 +40,11 @@ const valid_register = async (req, res) => {
         req.session.userInfo = { fullName, email, password, role, phoneNumber, totalLawyer, address };
         req.session.emailCode = verificationCode;
 
+        // save the session
+        req.session.save(err => {
+            if (err) console.error("Session save error:", err);
+        });
+
         return res.status(200).json({ statusCode: 200, message: "Verification code sent to your email. Please verify it.", });
     } catch (error) {
         return res.status(500).json({ statusCode: 500, message: "Internal server error", error: error.message, });
@@ -58,6 +63,10 @@ const resendVerificationCode = async (req, res) => {
         const verificationCode = await sendEmail(userInfo.email);
         console.log(verificationCode)
         req.session.emailCode = verificationCode;
+
+        req.session.save(err => {
+            if (err) console.error("Session save error:", err);
+        });
 
         return res.status(200).json({ statusCode: 200, message: "New verification code sent to your email." });
     } catch (error) {
@@ -119,6 +128,10 @@ const register_user = async (req, res) => {
 
         req.session.userInfo = null;
         req.session.emailCode = null;
+
+        req.session.destroy(err => {
+            if (err) console.error("Session destroy error:", err);
+        });
 
         return res.status(200).json({ statusCode: 200, message: "User create successfully", data: createdUser, accesstoken: accessToken });
     } catch (error) {
@@ -253,7 +266,7 @@ const editProfile = async (req, res) => {
         if (!currentUser) {
             return res.status(404).json({ statusCode: 404, message: "User not found" });
         }
-        const { email, fullName, userName, totalLawyer,address } = req.body;
+        const { email, fullName, userName, totalLawyer, address } = req.body;
 
         if (!email || !userName || !fullName || !address) {
             return res.status(400).json({ statusCode: 400, message: "Email and Username and fullName and address are required" });
@@ -336,7 +349,7 @@ const updateProfile = async (req, res) => {
             return res.status(400).json({ statusCode: 400, message: "User data not found in session or verification incomplete. Please complete the edit profile process again." });
         }
 
-        const { fullName, email, userName, totalLawyer,address } = userInfo;
+        const { fullName, email, userName, totalLawyer, address } = userInfo;
         // Update the user profile
         user.userName = userName;
         if (role === "law firm") user.totalLawyer = totalLawyer;
