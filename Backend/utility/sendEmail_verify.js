@@ -12,15 +12,13 @@ const sendEmail = async (email) => {
     try {
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.GMAIL_EMAIL,
                 pass: process.env.GMAIL_PASSWORD,
             },
-            tls: {
-                rejectUnauthorized: false
-            }
+            pool: true,
         });
 
         const code = generateCode();
@@ -33,6 +31,9 @@ const sendEmail = async (email) => {
             html: verificationEmailHTML(code),
         });
 
+        // Close the connection pool after sending
+        transporter.close();
+
         return code;
     } catch (error) {
         console.error("Failed to send verification email:", error.message);
@@ -44,15 +45,13 @@ const pas_Email = async (email, token) => {
     try {
         const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
-            port: 587,
-            secure: false,
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.GMAIL_EMAIL,
                 pass: process.env.GMAIL_PASSWORD,
             },
-            tls: {
-                rejectUnauthorized: false
-            }
+            pool: true,
         });
 
         const link = `https://qazi-law.vercel.app/change-password/${token}`;
@@ -63,6 +62,8 @@ const pas_Email = async (email, token) => {
             subject: "Reset your password",
             html: changePasswordEmail(link),
         });
+
+        transporter.close();
 
         return true;
     } catch (error) {
