@@ -54,12 +54,13 @@ const pas_Email = async (email, token) => {
             },
         });
 
-        const link = `https://dld-ten.vercel.app/change-password/${token}`; // Use your actual production URL
+        // Hardcode the link to your actual frontend URL
+        const link = `https://qazi-law.vercel.app/change-password/${token}`;
 
         await transporter.sendMail({
             from: `"DLD (Digital Lawyer Diary)" <${process.env.GMAIL_EMAIL}>`,
             to: email,
-            subject: "Verify your email for reset password",
+            subject: "Reset your password",
             html: changePasswordEmail(link),
         });
 
