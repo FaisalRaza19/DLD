@@ -1,8 +1,9 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 import dotenv from "dotenv";
 import { verificationEmailHTML, changePasswordEmail } from "./emailHTML.js";
-
 dotenv.config({ path: ".env" });
+
+const FROM_EMAIL = process.env.BREVO_SENDER_EMAIL;
 
 const generateCode = () => {
     return Math.floor(100000 + Math.random() * 900000);
@@ -11,28 +12,28 @@ const generateCode = () => {
 const sendEmail = async (email) => {
     try {
         const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
+            host: "smtp-relay.brevo.com",
+            port: 587,
+            secure: false,
             auth: {
-                user: process.env.GMAIL_EMAIL,
-                pass: process.env.GMAIL_PASSWORD,
+                user: process.env.BREVO_SMTP_LOGIN,
+                pass: process.env.BREVO_SMTP_KEY,
             },
-            pool: true,
         });
 
         const code = generateCode();
         console.log("email code", code);
 
-        await transporter.sendMail({
-            from: `"DLD (Digital Lawyer Diary)" <${process.env.GMAIL_EMAIL}>`,
+        const mailOptions = {
             to: email,
+            from: FROM_EMAIL,
             subject: "Verify your email",
             html: verificationEmailHTML(code),
-        });
+        };
 
-        // Close the connection pool after sending
-        transporter.close();
+        await transporter.sendMail(mailOptions);
+
+        console.log("Email sent successfully!");
 
         return code;
     } catch (error) {
@@ -44,26 +45,25 @@ const sendEmail = async (email) => {
 const pas_Email = async (email, token) => {
     try {
         const transporter = nodemailer.createTransport({
-            host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
+            host: "smtp-relay.brevo.com",
+            port: 587,
+            secure: false,
             auth: {
-                user: process.env.GMAIL_EMAIL,
-                pass: process.env.GMAIL_PASSWORD,
+                user: process.env.BREVO_SMTP_LOGIN,
+                pass: process.env.BREVO_SMTP_KEY,
             },
-            pool: true,
         });
 
         const link = `https://qazi-law.vercel.app/change-password/${token}`;
 
-        await transporter.sendMail({
-            from: `"DLD (Digital Lawyer Diary)" <${process.env.GMAIL_EMAIL}>`,
+        const mailOptions = {
             to: email,
+            from: FROM_EMAIL,
             subject: "Reset your password",
             html: changePasswordEmail(link),
-        });
+        };
 
-        transporter.close();
+        await transporter.sendMail(mailOptions);
 
         return true;
     } catch (error) {
