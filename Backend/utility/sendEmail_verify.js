@@ -1,68 +1,76 @@
 import nodemailer from "nodemailer";
-import { verificationEmailHTML, changePasswordEmail, } from "./emailHTML.js";
+import dotenv from "dotenv";
+import { verificationEmailHTML, changePasswordEmail } from "./emailHTML.js";
 
-// generate verification code
+dotenv.config({ path: ".env" });
+
+// Generate a 6-digit verification code
 const generateCode = () => {
-    return Math.floor(100000 + Math.random() * 900000)
-}
+    return Math.floor(100000 + Math.random() * 900000);
+};
 
-// email for varification
+// Send a verification email
 const sendEmail = async (email) => {
     try {
-        // create transpoter
         const transporter = nodemailer.createTransport({
-            service: "gmail",
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.GMAIL_EMAIL,
                 pass: process.env.GMAIL_PASSWORD,
             },
         });
 
-        // create verification code 
+        // Create verification code
         const code = generateCode();
-        console.log("email code", code)
+        console.log("email code", code);
 
-        // send email 
+        // Send email
         await transporter.sendMail({
             from: `"DLD (Digital Lawyer Diary)" <${process.env.GMAIL_EMAIL}>`,
             to: email,
             subject: "Verify your email",
             html: verificationEmailHTML(code),
-        })
+        });
 
         return code;
     } catch (error) {
-        return new Error("Failed to send verification code");
+        console.error("Failed to send verification email:", error.message);
+        return null;
     }
-}
+};
 
-// email for change password
+// Send an email for a password change request
 const pas_Email = async (email, token) => {
     try {
-        // create transpoter
         const transporter = nodemailer.createTransport({
-            service: "gmail",
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
             auth: {
                 user: process.env.GMAIL_EMAIL,
                 pass: process.env.GMAIL_PASSWORD,
             },
         });
 
-        const link = `http://localhost:3000/change-password/${token}`
-        // send email 
+        const link = `https://dld-ten.vercel.app/change-password/${token}`; // Use your actual production URL
+
         await transporter.sendMail({
             from: `"DLD (Digital Lawyer Diary)" <${process.env.GMAIL_EMAIL}>`,
             to: email,
             subject: "Verify your email for reset password",
             html: changePasswordEmail(link),
-        })
+        });
 
-        return code;
+        return true;
     } catch (error) {
-        return new Error("Failed to send verification code");
+        console.error("Failed to send password reset email:", error.message);
+        return null;
     }
-}
+};
 
+// Verify the user's code against the session code
 const verifyEmail = (userCode, emailCode) => {
     if (!userCode || !emailCode) {
         throw new Error("Verification code is required.");
@@ -71,6 +79,7 @@ const verifyEmail = (userCode, emailCode) => {
         throw new Error("Invalid verification code.");
     }
     return true;
-}
+};
 
-export { sendEmail, pas_Email, verifyEmail }
+export { sendEmail, pas_Email, verifyEmail };
+
