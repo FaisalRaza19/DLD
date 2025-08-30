@@ -38,18 +38,22 @@ const valid_register = async (req, res) => {
 
         // Save info in session. Using a fresh session to avoid issues.
         req.session.regenerate(err => {
-            if (err) console.error("Session regeneration error:", err);
+            if (err) {
+                return res.status(500).json({ statusCode: 500, message: "Could not start a session" });
+            }
 
-            req.session.userInfo = { fullName, email, password, role, phoneNumber, totalLawyer, address };
+            req.session.userInfo = { fullName, email, password: password, role, phoneNumber, totalLawyer, address };
             req.session.emailCode = verificationCode;
 
-            // Save the session explicitly
             req.session.save(saveErr => {
                 if (saveErr) {
-                    console.error("Session save error:", saveErr);
+                    return res.status(500).json({ statusCode: 500, message: "Failed to save session" });
                 }
 
-                return res.status(200).json({ statusCode: 200, message: "Verification code sent to your email. Please verify it." });
+                return res.status(200).json({
+                    statusCode: 200,
+                    message: "Verification code sent to your email. Please verify it."
+                });
             });
         });
     } catch (error) {
@@ -72,8 +76,9 @@ const resendVerificationCode = async (req, res) => {
 
         req.session.save(err => {
             if (err) {
-                console.error("Session save error:", err);
+                return res.status(500).json({ statusCode: 500, message: "Failed to update session" });
             }
+
             return res.status(200).json({ statusCode: 200, message: "New verification code sent to your email." });
         });
     } catch (error) {
@@ -87,7 +92,13 @@ const register_user = async (req, res) => {
         // get info
         const { code } = req.body;
         const { emailCode, userInfo } = req.session;
-        const { fullName, email, password, role, phoneNumber, totalLawyer, address } = userInfo
+
+        // Check if session data exists
+        if (!userInfo || !emailCode) {
+            return res.status(400).json({ statusCode: 400, message: "Session expired or invalid. Please try again." });
+        }
+
+        const { fullName, email, password, role, phoneNumber, totalLawyer, address } = userInfo;
 
         // verify email
         const verifyMail = verifyEmail(code, emailCode);
@@ -136,9 +147,20 @@ const register_user = async (req, res) => {
         // Destroy the session after successful registration
         req.session.destroy(err => {
             if (err) {
-                console.error("Session destroy error:", err);
+                return res.status(200).json({
+                    statusCode: 200,
+                    message: "User created,session",
+                    data: createdUser,
+                    accesstoken: accessToken
+                });
             }
-            return res.status(200).json({ statusCode: 200, message: "User created successfully", data: createdUser, accesstoken: accessToken });
+
+            return res.status(200).json({
+                statusCode: 200,
+                message: "User created successfully",
+                data: createdUser,
+                accesstoken: accessToken
+            });
         });
 
     } catch (error) {
