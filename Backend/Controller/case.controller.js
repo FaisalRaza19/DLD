@@ -492,7 +492,5 @@ const restoreCaseFiles = async (req, res) => {
     }
 };
 
-
-
 export { createCase, editCase, delCase, updateStatus, getCases, getCase, restoreCaseFiles }
 
