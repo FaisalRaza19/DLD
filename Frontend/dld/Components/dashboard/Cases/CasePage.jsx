@@ -204,7 +204,7 @@ const CasePage = () => {
                                             {c.status}
                                         </span>
                                         {c.caseDocs?.length > 0 && (
-                                            <span className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-300">
+                                            <span className="flex items-center gap-1 text-xs text-gray-400">
                                                 <FiFile className="h-3 w-3" /> {c.caseDocs.length} document{c.caseDocs.length > 1 ? "s" : ""}
                                             </span>
                                         )}
@@ -214,7 +214,7 @@ const CasePage = () => {
                                     <Link href={`/dashboard/cases/${c._id}`}>
                                         <button
                                             title="View"
-                                            className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-accent rounded-lg transition-colors"
+                                            className="p-2 text-gray-400 hover:text-gray-700 hover:bg-accent rounded-lg transition-colors"
                                         >
                                             <FiEye className="h-4 w-4" />
                                         </button>
@@ -222,21 +222,21 @@ const CasePage = () => {
                                     <button
                                         onClick={() => { setSelectedCase(c); setShowEditForm(true) }}
                                         title="Edit"
-                                        className="p-2 text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-accent rounded-lg transition-colors"
+                                        className="p-2 text-gray-400 hover:text-gray-700 hover:bg-accent rounded-lg transition-colors"
                                     >
                                         <FiEdit className="h-4 w-4" />
                                     </button>
                                     <button
                                         onClick={() => { setCaseToUpdate(c); setNewStatus(c.status || "Open"); setShowStatusModal(true) }}
                                         title="Change Status"
-                                        className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-lg transition-colors"
+                                        className="p-2 text-blue-500 hover:text-blue-700 hover:bg-blue-100 rounded-lg transition-colors"
                                     >
                                         <FiRefreshCw className="h-4 w-4" />
                                     </button>
                                     <button
                                         onClick={() => { setCaseToDelete(c); setShowDeleteModal(true) }}
                                         title="Delete"
-                                        className="p-2 text-red-500 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-colors"
+                                        className="p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-lg transition-colors"
                                     >
                                         <FiTrash2 className="h-4 w-4" />
                                     </button>

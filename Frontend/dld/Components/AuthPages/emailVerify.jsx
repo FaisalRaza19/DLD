@@ -81,24 +81,24 @@ const emailVerify = () => {
         <div className="mx-auto max-w-xl px-4 py-12">
             <form
                 onSubmit={onVerify}
-                className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"
+                className="space-y-6 rounded-xl border border-zinc-200 bg-white p-6"
             >
                 <Link href={isEditProfile ? "/dashboard" : "/signUp"}>
                     <button
                         type="button"
-                        className="mb-4 inline-flex items-center gap-2 text-sm text-zinc-600 hover:underline dark:text-zinc-400"
+                        className="mb-4 inline-flex items-center gap-2 text-sm text-zinc-600 hover:underline"
                     >
                         <FiArrowLeft /> Back
                     </button>
                 </Link>
 
                 <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
                         <FiMail />
                     </div>
                     <div>
                         <h1 className="text-xl font-semibold">Verify your email</h1>
-                        <p className="text-xs text-zinc-600 dark:text-zinc-400">
+                        <p className="text-xs text-zinc-600">
                             Enter the 6-digit code we sent to {email}
                         </p>
                     </div>
@@ -114,7 +114,7 @@ const emailVerify = () => {
                             maxLength={1}
                             value={v}
                             onChange={(e) => handleCodeChange(i, e.target.value)}
-                            className="h-12 w-12 rounded-md border border-zinc-300 bg-white text-center text-lg outline-none focus:ring-2 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-950"
+                            className="h-12 w-12 rounded-md border border-zinc-300 bg-white text-center text-lg outline-none focus:ring-2 focus:ring-emerald-500"
                         />
                     ))}
                 </div>
@@ -123,7 +123,7 @@ const emailVerify = () => {
                     <button
                         type="button"
                         onClick={onResend}
-                        className="text-sm text-emerald-700 hover:underline dark:text-emerald-400"
+                        className="text-sm text-emerald-700 hover:underline"
                     >
                         Resend code
                     </button>

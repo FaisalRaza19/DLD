@@ -77,7 +77,7 @@ const NotificationsPage = ({ onClose }) => {
         {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
         >
           <FiX className="w-6 h-6" />
         </button>
@@ -92,7 +92,7 @@ const NotificationsPage = ({ onClose }) => {
             {hasNotifications && notifications.map((n) => (
               <div
                 key={n._id}
-                className={`p-4 rounded-lg flex justify-between items-start gap-4 cursor-pointer transition-colors duration-200 ${n.isRead ? "opacity-60" : "bg-blue-50 dark:bg-gray-700/50"
+                className={`p-4 rounded-lg flex justify-between items-start gap-4 cursor-pointer transition-colors duration-200 ${n.isRead ? "opacity-60" : "bg-blue-50"
                   }`}
                 onClick={() => handleMarkAsRead(n._id)}
               >
@@ -106,7 +106,7 @@ const NotificationsPage = ({ onClose }) => {
                       {n.meta.caseTitle} - {n.meta.courtLocation}
                     </Link>
                   ) : (
-                    <p className="text-sm text-gray-500 dark:text-gray-400">{n.body}</p>
+                    <p className="text-sm text-gray-500">{n.body}</p>
                   )}
                   <small className="text-xs text-gray-400">
                     {moment(n.createdAt).fromNow()}
@@ -137,7 +137,7 @@ const NotificationsPage = ({ onClose }) => {
             {hasMessages && unreadMessages.map((msg) => (
               <div
                 key={msg._id}
-                className="p-4 rounded-lg bg-yellow-50 dark:bg-yellow-900/30 flex justify-between items-start gap-4 cursor-pointer"
+                className="p-4 rounded-lg bg-yellow-50 flex justify-between items-start gap-4 cursor-pointer"
                 onClick={() => handleMessageRead(msg._id)}
               >
                 <div className="flex-1">

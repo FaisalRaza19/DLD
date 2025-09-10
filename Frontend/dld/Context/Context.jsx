@@ -215,29 +215,6 @@ export function AppProvider({ children }) {
         return () => socket.disconnect()
     }, [isLoggedIn, url])
 
-    // Theme
-    const [theme, setTheme] = useState("light")
-    useEffect(() => {
-        const saved = localStorage.getItem("theme")
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-        const initial = saved || (prefersDark ? "dark" : "light")
-        setTheme(initial)
-        document.documentElement.classList.toggle("dark", initial === "dark")
-    }, [])
-    const toggleTheme = () => {
-        setTheme((prev) => {
-            const next = prev === "light" ? "dark" : "light"
-            if (next === "dark") {
-                localStorage.setItem("theme", "dark")
-                document.documentElement.classList.add("dark")
-            } else {
-                localStorage.removeItem("theme")
-                document.documentElement.classList.remove("dark")
-            }
-            return next
-        })
-    }
-
     const userProfile = { isEditProfile, setIsEditProfile }
     const verifyUser = { isVerify, isLoggedIn, setIsLoggedIn }
     const userAuth = {
@@ -256,8 +233,7 @@ export function AppProvider({ children }) {
     }
 
     const value = {
-        theme, toggleTheme, alerts, addAlert, removeAlert,
-        userAuth, userProfile, verifyUser, userImage, userData, setUserData,
+        alerts, addAlert, removeAlert,userAuth, userProfile, verifyUser, userImage, userData, setUserData,
         Cases, Clients, Lawyers, Hearings
     }
 

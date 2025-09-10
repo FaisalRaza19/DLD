@@ -38,9 +38,9 @@ const Testimonials = () => {
                     {items.map((t) => (
                         <div
                             key={t.id}
-                            className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
+                            className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:shadow-md"
                         >
-                            <div className="mb-3 text-sm text-zinc-600 dark:text-zinc-400">{t.message}</div>
+                            <div className="mb-3 text-sm text-zinc-600">{t.message}</div>
                             <div className="text-sm font-semibold">{t.name}</div>
                             <div className="text-xs text-zinc-500">{t.role}</div>
                         </div>

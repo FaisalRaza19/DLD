@@ -197,7 +197,7 @@ export default function DashboardPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className={`text-sm ${theme === "light" ? "text-gray-500" : "text-gray-300"} border-b border-gray-200 dark:border-gray-700`}>
+                <tr className={`text-sm ${theme === "light" ? "text-gray-500" : "text-gray-300"} border-b border-gray-200`}>
                   <th className="py-2 px-4">Name</th>
                   <th className="py-2 px-4">Type</th>
                   <th className="py-2 px-4">Status</th>
@@ -209,7 +209,7 @@ export default function DashboardPage() {
                   recentActivities.map((item) => (
                     <tr
                       key={item.id}
-                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="hover:bg-gray-100"
                     >
                       <td className="py-2 px-4">{item.name}</td>
                       <td className="py-2 px-4">{item.type}</td>

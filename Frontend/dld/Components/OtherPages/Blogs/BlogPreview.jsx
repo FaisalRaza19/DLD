@@ -28,7 +28,7 @@ const BlogPreview = ({ id }) => {
             <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
                 <Link href={"/blogs"}>
                     <button
-                        className="mb-4 rounded-md border border-zinc-300 px-3 py-2 text-sm transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900"
+                        className="mb-4 rounded-md border border-zinc-300 px-3 py-2 text-sm transition hover:bg-zinc-100"
                     >
                         Back
                     </button>
@@ -42,7 +42,7 @@ const BlogPreview = ({ id }) => {
         <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
             <Link href={"/blogs"}>
                 <button
-                    className="mb-6 rounded-md border border-zinc-300 px-3 py-2 text-sm transition hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-900"
+                    className="mb-6 rounded-md border border-zinc-300 px-3 py-2 text-sm transition hover:bg-zinc-100"
                 >
                     Back
                 </button>
@@ -53,7 +53,7 @@ const BlogPreview = ({ id }) => {
                 className="mb-6 h-72 w-full rounded-xl object-cover"
             />
             <h1 className="mb-4 text-3xl font-bold">{blog.title}</h1>
-            <p className="text-zinc-600 dark:text-zinc-300">{blog.content}</p>
+            <p className="text-zinc-600">{blog.content}</p>
         </div>
     )
 }

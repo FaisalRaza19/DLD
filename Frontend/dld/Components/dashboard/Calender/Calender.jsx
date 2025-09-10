@@ -167,7 +167,7 @@ const CalendarPage = () => {
             <FiCalendar className="h-8 w-8 text-blue-500" />
             <div>
               <h1 className="text-3xl font-bold">Hearings Calendar</h1>
-              <p className="text-gray-500 dark:text-gray-400">
+              <p className="text-gray-500">
                 Manage your upcoming hearings and schedules.
               </p>
             </div>

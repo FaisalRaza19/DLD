@@ -1,6 +1,6 @@
+// tailwind.config.mjs
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  darkMode: "class", // ✅ important
+export default {
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",

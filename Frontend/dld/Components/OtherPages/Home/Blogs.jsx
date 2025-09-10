@@ -23,7 +23,7 @@ const Blogs = () => {
         <section className="mx-auto mt-16 max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="mb-8 flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Latest Blogs</h2>
-                <Link href="/blogs" className="text-sm text-emerald-700 hover:underline dark:text-emerald-400">
+                <Link href="/blogs" className="text-sm text-emerald-700 hover:underline">
                     View all
                 </Link>
             </div>
@@ -45,7 +45,7 @@ const Blogs = () => {
                             <motion.article
                                 key={b.id}
                                 variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-                                className="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 transition hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+                                className="group relative overflow-hidden rounded-xl border border-zinc-200 bg-white p-4 transition hover:shadow-lg"
                             >
                                 <img
                                     src={b.image || "/placeholder.svg"}
@@ -53,10 +53,10 @@ const Blogs = () => {
                                     className="mb-4 h-40 w-full rounded-lg object-cover transition group-hover:scale-[1.02]"
                                 />
                                 <h3 className="line-clamp-2 text-lg font-semibold">{b.title}</h3>
-                                <p className="mt-2 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">{b.excerpt}</p>
+                                <p className="mt-2 line-clamp-2 text-sm text-zinc-600">{b.excerpt}</p>
                                 <Link
                                     href={`/blogs/${b.id}`}
-                                    className="mt-4 inline-flex text-sm font-medium text-emerald-700 transition hover:underline dark:text-emerald-400"
+                                    className="mt-4 inline-flex text-sm font-medium text-emerald-700 transition hover:underline"
                                 >
                                     Read more →
                                 </Link>

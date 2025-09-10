@@ -234,7 +234,7 @@ const HearingForm = ({ isOpen, onClose, hearingData = null, isEdit = false }) =>
                         <h2 className={`${text} md:text-xl font-semibold`}>
                             {isEdit ? "Edit Hearing" : "Add Hearing"}
                         </h2>
-                        <button type="button" onClick={onClose} className={`${text} p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700`}>
+                        <button type="button" onClick={onClose} className={`${text} p-1 rounded hover:bg-gray-200`}>
                             <FiX className="w-5 h-5" />
                         </button>
                     </div>
@@ -408,13 +408,13 @@ const HearingForm = ({ isOpen, onClose, hearingData = null, isEdit = false }) =>
                     {/* Delete Confirmation */}
                     {showDeleteConfirm && (
                         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
-                            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg max-w-sm w-full flex flex-col gap-4">
+                            <div className="bg-white p-6 rounded-lg max-w-sm w-full flex flex-col gap-4">
                                 <h3 className="text-lg font-semibold">Delete Hearing?</h3>
                                 <p>Are you sure you want to delete this hearing?</p>
                                 <div className="flex justify-end gap-2">
                                     <button
                                         onClick={() => setShowDeleteConfirm(false)}
-                                        className="px-3 py-2 rounded-lg bg-gray-300 dark:bg-gray-700"
+                                        className="px-3 py-2 rounded-lg bg-gray-300"
                                     >
                                         Cancel
                                     </button>

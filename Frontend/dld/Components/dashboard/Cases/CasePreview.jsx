@@ -149,23 +149,23 @@ const CasePreview = () => {
     // --- Status and Type Colors (made case-insensitive) ---
     const getStatusColor = (status = "") => {
         switch (status) {
-            case "Open": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-            case "In Progress": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-            case "Closed": return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
-            case "On Hold": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-            default: return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+            case "Open": return "bg-green-100 text-green-800"
+            case "In Progress": return "bg-yellow-100 text-yellow-800"
+            case "Closed": return "bg-gray-100 text-gray-800"
+            case "On Hold": return "bg-red-100 text-red-800"
+            default: return "bg-gray-100 text-gray-800"
         }
     }
 
     const getTypeColor = (type = "") => {
         switch (type.toLowerCase()) {
-            case "civil": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-            case "criminal": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
-            case "corporate": return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
-            case "family": return "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
-            case "tax": return "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200"
-            case "property": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-            default: return "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+            case "civil": return "bg-blue-100 text-blue-800"
+            case "criminal": return "bg-red-100 text-red-800"
+            case "corporate": return "bg-purple-100 text-purple-800"
+            case "family": return "bg-pink-100 text-pink-800"
+            case "tax": return "bg-indigo-100 text-indigo-800"
+            case "property": return "bg-green-100 text-green-800"
+            default: return "bg-gray-100 text-gray-800"
         }
     }
 
@@ -173,14 +173,14 @@ const CasePreview = () => {
         return (
             <DashboardLayout>
                 <div className="p-6 animate-pulse">
-                    <div className="h-8 bg-gray-300 dark:bg-gray-700 rounded w-1/3 mb-6"></div>
+                    <div className="h-8 bg-gray-300 rounded w-1/3 mb-6"></div>
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2 space-y-6">
-                            <div className="h-40 bg-gray-300 dark:bg-gray-700 rounded"></div>
-                            <div className="h-32 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                            <div className="h-40 bg-gray-300 rounded"></div>
+                            <div className="h-32 bg-gray-300 rounded"></div>
                         </div>
                         <div className="space-y-6">
-                            <div className="h-64 bg-gray-300 dark:bg-gray-700 rounded"></div>
+                            <div className="h-64 bg-gray-300 rounded"></div>
                         </div>
                     </div>
                 </div>
@@ -210,7 +210,7 @@ const CasePreview = () => {
                 {/* Header */}
                 <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
                     <div className="flex items-center gap-4">
-                        <button onClick={() => router.back()} className={`p-2 ${textMuted} hover:${textPrimary} hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors`}>
+                        <button onClick={() => router.back()} className={`p-2 ${textMuted} hover:${textPrimary} hover:bg-gray-200 rounded-full transition-colors`}>
                             <FiArrowLeft className="h-6 w-6" />
                         </button>
                         <div>
@@ -219,7 +219,7 @@ const CasePreview = () => {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <button onClick={() => setShowEditForm(true)} className="flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors">
+                        <button onClick={() => setShowEditForm(true)} className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
                             <FiEdit className="h-4 w-4" />
                             Edit
                         </button>
@@ -277,7 +277,7 @@ const CasePreview = () => {
                             <div className={`${cardBg} border ${border} rounded-xl p-6 shadow-sm`}>
                                 <h2 className={`text-2xl font-semibold ${textPrimary} mb-6`}>Status History</h2>
 
-                                <div className="relative pl-6 border-l-2 border-gray-300 dark:border-gray-600">
+                                <div className="relative pl-6 border-l-2 border-gray-300">
                                     {caseData.statusHistory
                                         .slice() // clone array
                                         .reverse() // show newest first
@@ -310,7 +310,7 @@ const CasePreview = () => {
                             {caseHearings.length > 0 ? (
                                 <div className="space-y-3">
                                     {caseHearings.map(h => (
-                                        <div key={h._id} className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                                        <div key={h._id} className="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
                                             <div className="flex items-center gap-3">
                                                 <FiCalendar className={`h-5 w-5 ${textMuted}`} />
                                                 <div>
@@ -376,14 +376,14 @@ const CasePreview = () => {
                             {caseData.caseDocs && caseData.caseDocs.length > 0 ? (
                                 <div className="space-y-3">
                                     {caseData.caseDocs.filter(doc => doc?.isShowing).map(doc => (
-                                        <div key={doc.publicId} className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-700/50 rounded-lg">
+                                        <div key={doc.publicId} className="flex items-center justify-between p-3 bg-gray-100 rounded-lg">
                                             <div className="flex items-center gap-3 flex-1 min-w-0">
                                                 <FiFile className={`h-5 w-5 ${textMuted} flex-shrink-0`} />
                                                 <span className={`text-sm ${textPrimary} truncate`} title={doc.originalName}>{doc.originalName}</span>
                                             </div>
                                             <div className="flex gap-2">
-                                                <button onClick={() => { setSelectedDocument(doc); setShowDocumentViewer(true); }} className={`p-2 ${textMuted} hover:${textPrimary} rounded-full hover:bg-gray-200 dark:hover:bg-gray-600`} title="Preview"><FiEye className="h-4 w-4" /></button>
-                                                <button onClick={() => handleDownloadSingle(doc.docUrl, doc.originalName)} className={`p-2 ${textMuted} hover:${textPrimary} rounded-full hover:bg-gray-200 dark:hover:bg-gray-600`} title="Download"><FiDownload className="h-4 w-4" /></button>
+                                                <button onClick={() => { setSelectedDocument(doc); setShowDocumentViewer(true); }} className={`p-2 ${textMuted} hover:${textPrimary} rounded-full hover:bg-gray-200`} title="Preview"><FiEye className="h-4 w-4" /></button>
+                                                <button onClick={() => handleDownloadSingle(doc.docUrl, doc.originalName)} className={`p-2 ${textMuted} hover:${textPrimary} rounded-full hover:bg-gray-200`} title="Download"><FiDownload className="h-4 w-4" /></button>
                                             </div>
                                         </div>
                                     ))}
@@ -420,7 +420,7 @@ const CasePreview = () => {
                                 Are you sure you want to delete "{caseData.caseTitle}"? This action cannot be undone.
                             </p>
                             <div className="flex justify-end gap-4">
-                                <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">
+                                <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
                                     Cancel
                                 </button>
                                 <button onClick={() => handleDeleteCase(caseData?._id)} className={`px-4 py-2 rounded-lg ${destructiveBtn}`}>

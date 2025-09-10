@@ -36,7 +36,7 @@ const Contact = () => {
                 <div>
                     <label className="mb-1 block text-sm font-medium">Name</label>
                     <input
-                        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900"
+                        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2"
                         name="name"
                         value={values.name}
                         onChange={handleChange}
@@ -46,7 +46,7 @@ const Contact = () => {
                 <div>
                     <label className="mb-1 block text-sm font-medium">Email</label>
                     <input
-                        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900"
+                        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2"
                         name="email"
                         type="email"
                         value={values.email}
@@ -57,7 +57,7 @@ const Contact = () => {
                 <div>
                     <label className="mb-1 block text-sm font-medium">Message</label>
                     <textarea
-                        className="min-h-[120px] w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-900"
+                        className="min-h-[120px] w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2"
                         name="message"
                         value={values.message}
                         onChange={handleChange}

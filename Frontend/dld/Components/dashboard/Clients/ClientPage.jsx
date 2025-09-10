@@ -136,9 +136,9 @@ const ClientPage = () => {
                                     {client.address && <div className={`flex items-center gap-2 ${textClass}`}><FiMapPin className="h-4 w-4" /><span className="truncate">{client?.address || "address 123"}</span></div>}
                                 </div>
 
-                                {client.notes && <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"><p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{client.notes}</p></div>}
+                                {client.notes && <div className="mt-4 pt-4 border-t border-gray-200"><p className="text-sm text-gray-500 line-clamp-2">{client.notes}</p></div>}
 
-                                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700"><p className="text-xs text-gray-200 dark:text-gray-500">Added on {formatDate(client.createdAt) || "Today"}</p></div>
+                                <div className="mt-4 pt-4 border-t border-gray-200"><p className="text-xs text-gray-200">Added on {formatDate(client.createdAt) || "Today"}</p></div>
                             </div>
                         ))}
                     </div>

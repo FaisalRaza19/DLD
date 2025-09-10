@@ -81,21 +81,21 @@ const Login = () => {
             {/* Back to Home Button */}
             <Link
                 href="/"
-                className="mb-6 inline-flex items-center gap-2 text-sm text-zinc-600 hover:underline dark:text-zinc-400"
+                className="mb-6 inline-flex items-center gap-2 text-sm text-zinc-600 hover:underline"
             >
                 <FiArrowLeft /> Back to Home
             </Link>
 
             {showForgotResult ? (
-                <div className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+                <div className="rounded-xl border border-zinc-200 bg-white p-6">
                     <button
                         onClick={() => setShowForgotResult(false)}
-                        className="mb-4 inline-flex items-center gap-2 text-sm text-zinc-600 hover:underline dark:text-zinc-400"
+                        className="mb-4 inline-flex items-center gap-2 text-sm text-zinc-600 hover:underline"
                     >
                         <FiArrowLeft /> Back
                     </button>
                     <h1 className="mb-2 text-xl font-semibold">Password Reset</h1>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-sm text-zinc-600">
                         We will send an email to this address:{" "}
                         <span className="font-medium">{formData.emailOrUsername}</span>
                     </p>
@@ -103,13 +103,13 @@ const Login = () => {
             ) : (
                 <form
                     onSubmit={handleSubmit}
-                    className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+                    className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm"
                 >
                     <h1 className="mb-6 text-2xl font-bold">Login</h1>
 
                     <label className="mb-2 block text-sm font-medium">Email or Username</label>
                     <input
-                        className="mb-4 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-950"
+                        className="mb-4 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2"
                         name="emailOrUsername"
                         value={formData.emailOrUsername}
                         onChange={handleChange}
@@ -118,7 +118,7 @@ const Login = () => {
 
                     <label className="mb-2 block text-sm font-medium">Password</label>
                     <input
-                        className="mb-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2 dark:border-zinc-700 dark:bg-zinc-950"
+                        className="mb-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 outline-none ring-emerald-500 transition focus:ring-2"
                         name="password"
                         type="password"
                         value={formData.password}
@@ -130,11 +130,11 @@ const Login = () => {
                         <button
                             type="button"
                             onClick={onForgot}
-                            className="text-sm text-emerald-700 hover:underline dark:text-emerald-400"
+                            className="text-sm text-emerald-700 hover:underline"
                         >
                             Forgot Password?
                         </button>
-                        <Link href="/signUp" className="text-sm text-zinc-600 hover:underline dark:text-zinc-400">
+                        <Link href="/signUp" className="text-sm text-zinc-600 hover:underline">
                             Create account
                         </Link>
                     </div>

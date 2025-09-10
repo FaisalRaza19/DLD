@@ -16,7 +16,7 @@ export default function MainLayout({ children }) {
         isDashboard;
 
     return (
-        <div className="min-h-screen bg-white text-zinc-900 transition-colors duration-300 dark:bg-zinc-950 dark:text-zinc-100">
+        <div className="min-h-screen bg-white text-zinc-900 transition-colors duration-300">
             {/* The top loader will automatically handle loading progress on route changes */}
             <LoadingBar
                 color="#2563eb"

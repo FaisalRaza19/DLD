@@ -253,7 +253,7 @@ const LawyerPage = () => {
                                                 setLawyerToDelete(lawyer)
                                                 setShowDeleteModal(true)
                                             }}
-                                            className={`p-2 text-red-500 hover:text-red-700 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-colors`}
+                                            className={`p-2 text-red-500 hover:text-red-700 hover:bg-red-100 rounded-lg transition-colors`}
                                             title="Remove Lawyer"
                                         >
                                             <FiTrash2 className="h-4 w-4" />

@@ -38,10 +38,10 @@ const Alert = () => {
                             exit={{ opacity: 0, y: 16, scale: 0.98 }}
                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
                             className={`pointer-events-auto flex items-start gap-3 rounded-lg border p-3 shadow-lg ${type === "success"
-                                    ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-200"
+                                    ? "border-emerald-200 bg-emerald-50 text-emerald-800"
                                     : type === "error"
-                                        ? "border-rose-200 bg-rose-50 text-rose-800 dark:border-rose-900 dark:bg-rose-950 dark:text-rose-200"
-                                        : "border-blue-200 bg-blue-50 text-blue-800 dark:border-blue-900 dark:bg-blue-950 dark:text-blue-200"
+                                        ? "border-rose-200 bg-rose-50 text-rose-800"
+                                        : "border-blue-200 bg-blue-50 text-blue-800"
                                 }`}
                         >
                             <div className="mt-0.5 text-lg">{iconFor(type)}</div>

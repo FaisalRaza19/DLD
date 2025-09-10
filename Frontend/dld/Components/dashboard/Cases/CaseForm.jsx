@@ -460,7 +460,7 @@ const CaseForm = ({ isOpen, onClose, caseData = null, isEdit = false, setCaseDat
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-4 pt-4 border-t border-gray-300 dark:border-gray-700">
+          <div className="flex justify-end gap-4 pt-4 border-t border-gray-300">
             <button type="button" onClick={onClose} className={`${muted} hover:${text} px-4 py-2 rounded-lg`}>
               Cancel
             </button>

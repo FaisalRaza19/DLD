@@ -20,15 +20,15 @@ const FAQS = () => {
 
     return (
         <section className="mx-auto max-w-3xl space-y-8 px-4 py-12 sm:px-6 lg:px-8">
-            <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 dark:text-zinc-100">
+            <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900">
                 Frequently Asked Questions
             </h1>
 
-            <div className="divide-y divide-zinc-200 rounded-xl border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+            <div className="divide-y divide-zinc-200 rounded-xl border border-zinc-200">
                 {faqsData.map((faq, i) => (
                     <div
                         key={i}
-                        className="group border-b border-zinc-200 last:border-0 dark:border-zinc-800"
+                        className="group border-b border-zinc-200 last:border-0"
                     >
                         <button
                             type="button"
@@ -36,7 +36,7 @@ const FAQS = () => {
                             aria-controls={`faq-${i}-content`}
                             id={`faq-${i}-header`}
                             onClick={() => toggleFAQ(i)}
-                            className="flex w-full items-center justify-between bg-zinc-50 px-6 py-4 text-left text-lg font-semibold text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 transition"
+                            className="flex w-full items-center justify-between bg-zinc-50 px-6 py-4 text-left text-lg font-semibold text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 transition"
                         >
                             <span>{faq.q}</span>
                             <svg
@@ -56,7 +56,7 @@ const FAQS = () => {
                             id={`faq-${i}-content`}
                             role="region"
                             aria-labelledby={`faq-${i}-header`}
-                            className={`px-6 overflow-hidden text-zinc-700 dark:text-zinc-300 transition-all duration-300 ease-in-out ${openIndex === i ? "max-h-96 py-4" : "max-h-0"}`}
+                            className={`px-6 overflow-hidden text-zinc-700 transition-all duration-300 ease-in-out ${openIndex === i ? "max-h-96 py-4" : "max-h-0"}`}
                             style={{ transitionProperty: "max-height, padding" }}
                         >
                             <p>{faq.a}</p>

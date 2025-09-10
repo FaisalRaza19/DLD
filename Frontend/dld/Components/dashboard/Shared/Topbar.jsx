@@ -246,7 +246,7 @@ const Topbar = () => {
         <div className="relative" ref={notificationsRef}>
           <button
             onClick={() => setShowNotifications(true)}
-            className="relative p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="relative p-2 rounded-full hover:bg-gray-200"
             title="Notifications"
           >
             <FiBell className="h-5 w-5" />

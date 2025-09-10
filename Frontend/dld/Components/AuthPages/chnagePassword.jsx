@@ -54,17 +54,17 @@ const ChangePassword = () => {
     };
 
     return (
-        <main className="flex items-center justify-center mt-24 dark:bg-gray-900 p-4 overflow-hidden">
+        <main className="flex items-center justify-center mt-24 p-4 overflow-hidden">
             <form
                 onSubmit={handleSubmit}
-                className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 w-full max-w-md sm:max-w-lg"
+                className="bg-white shadow-md rounded-lg p-6 w-full max-w-md sm:max-w-lg"
                 aria-label="Change password form"
             >
                 {/* Back button */}
                 <Link href={"/"}>
                     <button
                         type="button"
-                        className="inline-flex items-center gap-2 mb-6 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+                        className="inline-flex items-center gap-2 mb-6 text-gray-600 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
                         aria-label="Go back"
                     >
                         <FiArrowLeft className="text-lg" />
@@ -72,14 +72,14 @@ const ChangePassword = () => {
                     </button>
                 </Link>
 
-                <h2 className="text-3xl font-semibold mb-6 text-center text-gray-900 dark:text-gray-100">
+                <h2 className="text-3xl font-semibold mb-6 text-center text-gray-900">
                     Change Password
                 </h2>
 
                 <div className="mb-5">
                     <label
                         htmlFor="new-password"
-                        className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
+                        className="block mb-2 font-medium text-gray-700"
                     >
                         New Password
                     </label>
@@ -88,7 +88,7 @@ const ChangePassword = () => {
                         type="password"
                         value={newPass}
                         onChange={(e) => setNewPass(e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500"
+                        className="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Enter new password"
                         autoComplete="new-password"
                         required
@@ -99,7 +99,7 @@ const ChangePassword = () => {
                 <div className="mb-6">
                     <label
                         htmlFor="confirm-password"
-                        className="block mb-2 font-medium text-gray-700 dark:text-gray-300"
+                        className="block mb-2 font-medium text-gray-700"
                     >
                         Confirm Password
                     </label>
@@ -108,7 +108,7 @@ const ChangePassword = () => {
                         type="password"
                         value={confirmPass}
                         onChange={(e) => setConfirmPass(e.target.value)}
-                        className="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-500"
+                        className="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="Confirm password"
                         autoComplete="new-password"
                         required
