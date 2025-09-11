@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useApp } from "@/Context/Context.jsx";
 import { FiX, FiLoader, FiUpload, FiUser } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input"
+import "react-phone-number-input/style.css"
 
 const ProfileForm = ({ isOpen, onClose }) => {
   const router = useRouter();
@@ -22,6 +24,7 @@ const ProfileForm = ({ isOpen, onClose }) => {
     userName: "",
     phoneNumber: "",
     address: "",
+    totalLawyer: 1
   });
 
   // Prefill form
@@ -33,6 +36,16 @@ const ProfileForm = ({ isOpen, onClose }) => {
         userName: user?.userName || "",
         phoneNumber: user?.phoneNumber || "",
         address: user?.address || "",
+      });
+    }
+    if (user?.role === "Law Firm") {
+      setFormData({
+        fullName: user?.fullName || "",
+        email: user?.email || "",
+        userName: user?.userName || "",
+        phoneNumber: user?.phoneNumber || "",
+        address: user?.address || "",
+        totalLawyer: user?.totalLawyer || 1
       });
     }
   }, [user]);
@@ -67,8 +80,15 @@ const ProfileForm = ({ isOpen, onClose }) => {
     }
   };
 
+  const handlePhoneChange = (value) => {
+    setFormData(prev => ({ ...prev, phoneNumber: value }))
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.phoneNumber && !isValidPhoneNumber(formData.phoneNumber)) {
+      return addAlert({ type: "error", message: "Invalid phone number!" })
+    }
     setFormLoading(true);
     try {
       const payload = { ...formData };
@@ -206,13 +226,12 @@ const ProfileForm = ({ isOpen, onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-black mb-2">Phone Number</label>
-              <input
-                type="tel"
-                name="phoneNumber"
+              <PhoneInput
+                international
                 value={formData.phoneNumber}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
-                placeholder="Enter your phone number"
+                onChange={handlePhoneChange}
+                placeholder="Enter phone number"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black"
               />
             </div>
 
@@ -226,6 +245,18 @@ const ProfileForm = ({ isOpen, onClose }) => {
                 placeholder="Role (cannot be changed)"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-black mb-2">Total Lawyer</label>
+            <input
+              type="number"
+              name="totalLawyer"
+              value={formData.totalLawyer}
+              onChange={handleInputChange}
+              className="w-full px-3 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
+              placeholder="Enter your Curent Lawyer"
+            />
           </div>
 
           <div>

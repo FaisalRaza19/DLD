@@ -6,7 +6,7 @@ import DashboardLayout from "@/Components/dashboard/DashboardLayout.jsx"
 import LawyerForm from "@/Components/dashboard/Lawyers/LawyerForm.jsx"
 import LawyerSkeleton from "@/Components/Skeletons/LawyerSkeleton.jsx"
 import {
-    FiPlus, FiSearch, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiMapPin, FiBookOpen,
+    FiPlus, FiSearch, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiMapPin, FiBookOpen,FiLoader
 } from "react-icons/fi"
 import { formatDate } from "@/Components/formatDate"
 
@@ -14,6 +14,7 @@ const LawyerPage = () => {
     const router = useRouter()
     const { userData, addAlert, Lawyers } = useApp()
     const { lawyers, setLawyers, delLawyer } = Lawyers
+    const [isDeleting, setIsDeleting] = useState(false)
 
     const [filteredLawyers, setFilteredLawyers] = useState([])
     const [searchQuery, setSearchQuery] = useState("")
@@ -65,6 +66,7 @@ const LawyerPage = () => {
     const handleDeleteLawyer = async (lawyerId) => {
         try {
             setLoading(true)
+            setIsDeleting(true)
             const result = await delLawyer({ lawyerId })
             if (result?.statusCode === 200) {
                 setLawyers(prev => prev.filter(c => c._id !== lawyerId))
@@ -73,6 +75,7 @@ const LawyerPage = () => {
         } catch (error) {
             addAlert({ type: "error", message: "An error occurred while removing the lawyer" })
         } finally {
+            setIsDeleting(false)
             setLoading(false)
             setShowDeleteModal(false)
             setLawyerToDelete(null)
@@ -254,7 +257,7 @@ const LawyerPage = () => {
                                 </button>
                                 <button onClick={() => handleDeleteLawyer(lawyerToDelete._id)}
                                     className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors">
-                                    Remove
+                                    {isDeleting ? <FiLoader className="h-4 w-4 animate-spin inline-block" /> : "Delete"}
                                 </button>
                             </div>
                         </div>

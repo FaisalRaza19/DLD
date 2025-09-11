@@ -1,0 +1,4 @@
+this file add for to resolve this error because git did not track empty folder so he did not add that's why 
+multer need temp folder to store temp file so it's give this error 
+
+Error: ENOENT: no such file or directory, open 'temp/1757594132283-828497295-code.jpg'

@@ -32,7 +32,6 @@ build/
 coverage/
 
 # Temporary files or folders
-temp/
 tmp/
 
 # Uploaded files (optional)

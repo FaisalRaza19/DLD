@@ -295,9 +295,9 @@ const editProfile = async (req, res) => {
         if (!currentUser) {
             return res.status(404).json({ statusCode: 404, message: "User not found" });
         }
-        const { email, fullName, userName, totalLawyer, address } = req.body;
+        const { email, fullName, userName, totalLawyer, address,phoneNumber} = req.body;
 
-        if (!email || !userName || !fullName || !address) {
+        if (!email || !userName || !fullName || !address || !phoneNumber) {
             return res.status(400).json({ statusCode: 400, message: "Email and Username and fullName and address are required" });
         }
         if (currentUser.role === "Law Firm" && !totalLawyer) {
@@ -328,7 +328,7 @@ const editProfile = async (req, res) => {
             }
 
             req.session.emailCode = verificationCode;
-            req.session.userInfo = { fullName, email, userName, totalLawyer, address, role: currentUser.role };
+            req.session.userInfo = { fullName, email, userName, totalLawyer, address, role: currentUser.role,phoneNumber};
 
             // Explicitly save session and provide a response
             req.session.save(err => {
@@ -346,6 +346,7 @@ const editProfile = async (req, res) => {
         if (currentUser.fullName) currentUser.fullName = fullName;
         if (currentUser.address) currentUser.address = address;
         if (currentUser.role === "Law Firm" && currentUser.totalLawyer) currentUser.totalLawyer = totalLawyer;
+        if (currentUser.role === "Law Firm" && currentUser.phoneNumber) currentUser.phoneNumber = phoneNumber;
 
         await currentUser.save();
 
@@ -382,10 +383,11 @@ const updateProfile = async (req, res) => {
             return res.status(400).json({ statusCode: 400, message: "User data not found in session or verification incomplete. Please complete the edit profile process again." });
         }
 
-        const { fullName, email, userName, totalLawyer, address, role } = userInfo;
+        const { fullName, email, userName, totalLawyer, address, role,phoneNumber} = userInfo;
         // Update the user profile
         user.userName = userName;
         if (role === "Law Firm") user.totalLawyer = totalLawyer;
+        if (role === "Law Firm") user.phoneNumber = phoneNumber;
         user.email = email;
         user.fullName = fullName;
         user.address = address;
