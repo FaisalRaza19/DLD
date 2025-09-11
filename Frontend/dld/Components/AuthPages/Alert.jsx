@@ -24,7 +24,13 @@ const Alert = () => {
     }
 
     return (
-        <div className="pointer-events-none fixed bottom-4 right-4 z-[60] flex w-full max-w-sm flex-col gap-2">
+        <div
+            className="
+        pointer-events-none fixed bottom-4 z-[60] 
+        flex flex-col gap-2 w-full px-4 
+        sm:items-end sm:right-4 sm:w-auto sm:max-w-sm
+      "
+        >
             <AnimatePresence>
                 {alerts.map((a) => {
                     const type = getAlertType(a)
@@ -37,7 +43,8 @@ const Alert = () => {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: 16, scale: 0.98 }}
                             transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                            className={`pointer-events-auto flex items-start gap-3 rounded-lg border p-3 shadow-lg ${type === "success"
+                            className={`pointer-events-auto flex items-start gap-3 rounded-lg border p-3 shadow-lg 
+                ${type === "success"
                                     ? "border-emerald-200 bg-emerald-50 text-emerald-800"
                                     : type === "error"
                                         ? "border-rose-200 bg-rose-50 text-rose-800"

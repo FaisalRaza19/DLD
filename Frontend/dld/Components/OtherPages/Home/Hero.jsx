@@ -31,7 +31,7 @@ const Hero = () => {
                         </p>
                         <div className="mt-8 flex items-center justify-center gap-3 lg:justify-start">
                             <Link
-                                href={isLoggedIn ? "/dashboard" : "/signup"}
+                                href={isLoggedIn ? "/dashboard" : "/signUp"}
                                 className="rounded-md bg-emerald-600 px-5 py-3 font-medium text-white shadow-lg shadow-emerald-600/20 transition hover:-translate-y-0.5 hover:bg-emerald-500"
                             >
                                {isLoggedIn ? "Go To Dashboard" : "Get Started"}

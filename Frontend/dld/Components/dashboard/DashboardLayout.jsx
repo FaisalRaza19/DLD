@@ -24,12 +24,9 @@ const DashboardLayout = ({ children }) => {
         <Topbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto p-6 md:p-8 bg-gray-100">
-          {/* Children Container */}
-          <div className="flex justify-center md:justify-start">
-            <div className="w-full max-w-6xl bg-white shadow-md rounded-lg transition-colors duration-300 p-6 md:p-8">
-              {children}
-            </div>
+        <main className="flex-1 overflow-auto p-2 sm:p-6 bg-gray-100">
+          <div className="w-full max-w-9xl lg:mr-12 mr-0 bg-white shadow-md rounded-lg transition-colors duration-300 p-2 sm:p-6">
+            {children}
           </div>
         </main>
       </div>
