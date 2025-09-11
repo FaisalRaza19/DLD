@@ -15,7 +15,7 @@ const localizer = momentLocalizer(moment);
 const DnDCalendar = withDragAndDrop(Calendar);
 
 const CalendarPage = () => {
-  const { theme, Hearings, addAlert } = useApp();
+  const { Hearings, addAlert } = useApp();
   const { hearings, setHearings } = Hearings;
 
   const [view, setView] = useState(Views.MONTH);
@@ -66,9 +66,7 @@ const CalendarPage = () => {
           fontWeight: "500",
         },
       };
-    },
-    []
-  );
+    }, []);
 
 
   // Dates with hearings
@@ -88,7 +86,7 @@ const CalendarPage = () => {
     ({ start }) => {
       const isPast = moment(start).isBefore(moment(), "day");
       if (isPast && !hasHearingOnDate(start)) {
-        alert("Cannot add hearings on past empty dates."); // feedback
+        alert("Cannot add hearings on past empty dates.");
         return;
       }
       setSelectedHearing({ startsAt: start });
@@ -124,7 +122,7 @@ const CalendarPage = () => {
         );
       }
     } catch (err) {
-      addAlert({ statusCode: 500, message: "Failed to update hearing" || err.message })
+      addAlert({ statusCode: 500, message: "Failed to update hearing" });
     }
   };
 
@@ -147,15 +145,15 @@ const CalendarPage = () => {
         return {
           style: {
             cursor: "not-allowed",
-            backgroundColor: theme === "light" ? "#f3f4f6" : "#1f2937",
-            color: theme === "light" ? "#9ca3af" : "#6b7280",
+            backgroundColor: "#f5f5f5",
+            color: "#9e9e9e",
             opacity: 0.6,
           },
         };
       }
       return { style: { cursor: "pointer" } };
     },
-    [hasHearingOnDate, theme]
+    [hasHearingOnDate]
   );
 
   return (
@@ -164,10 +162,10 @@ const CalendarPage = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
           <div className="flex items-center gap-4">
-            <FiCalendar className="h-8 w-8 text-blue-500" />
+            <FiCalendar className="h-8 w-8 text-black" />
             <div>
-              <h1 className="text-3xl font-bold">Hearings Calendar</h1>
-              <p className="text-gray-500">
+              <h1 className="text-3xl font-bold text-black">Hearings Calendar</h1>
+              <p className="text-gray-700">
                 Manage your upcoming hearings and schedules.
               </p>
             </div>
@@ -177,17 +175,14 @@ const CalendarPage = () => {
               setSelectedHearing(null);
               setIsFormOpen(true);
             }}
-            className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors w-full md:w-auto"
+            className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-black text-white font-semibold hover:bg-gray-900 transition-colors w-full md:w-auto"
           >
             <FiPlus /> Add Hearing
           </button>
         </div>
 
         {/* Calendar */}
-        <div
-          className={`rounded-2xl border p-1 md:p-4 shadow-sm ${theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"
-            }`}
-        >
+        <div className="rounded-2xl border p-1 md:p-4 shadow-sm bg-white border-gray-300">
           <DnDCalendar
             localizer={localizer}
             events={events}

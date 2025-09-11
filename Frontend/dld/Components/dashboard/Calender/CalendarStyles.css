@@ -1,62 +1,38 @@
-/* Custom Styles for React Big Calendar */
+/* React Big Calendar - Pure Black & White */
+
 .rbc-calendar {
-    color: var(--text-color);
+    color: #000;
+    background-color: #fff;
 }
 
 .rbc-toolbar button {
-    color: var(--text-color) !important;
-    border: 1px solid var(--border-color) !important;
+    color: #000 !important;
+    border: 1px solid #d1d5db !important; /* light gray */
+    background: #fff;
 }
 
 .rbc-toolbar button:hover,
 .rbc-toolbar button:focus {
-    background-color: var(--hover-bg) !important;
+    background-color: #f3f3f3 !important;
 }
 
 .rbc-active {
-    background-color: var(--primary-color) !important;
-    color: white !important;
-    border-color: var(--primary-color) !important;
+    color: #fff !important;
+    border-color: #000 !important;
 }
 
 .rbc-event {
     border: none !important;
     padding: 4px 8px !important;
     border-radius: 6px !important;
-    color: white !important;
+    color: #fff !important;
 }
 
-/* Styles based on hearing progress */
-.event-scheduled {
-    background-color: #3b82f6 !important;
-}
-
-.event-adjourned {
-    background-color: #f59e0b !important;
-}
-
-.event-completed {
-    background-color: #22c55e !important;
-}
-
-.event-cancelled {
-    background-color: #ef4444 !important;
-}
-
-/* Light Theme Variables */
-:root {
-    --text-color: #1f2937;
-    --border-color: #e5e7eb;
-    --hover-bg: #f3f4f6;
-    --primary-color: #3b82f6;
-}
-
-/* Dark Theme Variables */
-.dark {
-    --text-color: #f9fafb;
-    --border-color: #4b5563;
-    --hover-bg: #374151;
-}
+/* Hearing progress colors (monochrome friendly) */
+.event-scheduled { background-color: #1f2937 !important; } /* dark gray */
+.event-adjourned { background-color: #374151 !important; }  /* medium gray */
+.event-completed { background-color: #4b5563 !important; }  /* light gray */
+.event-cancelled { background-color: #6b7280 !important; }  /* lighter gray */
 
 /* Badge for days with hearings */
 .rbc-day-bg.has-hearings::after {
@@ -64,18 +40,11 @@
     position: absolute;
     top: 4px;
     right: 4px;
-    background-color: #2563eb;
-    /* default blue */
+    background-color: #000;
     color: #fff;
     font-size: 0.625rem;
     font-weight: bold;
     padding: 0 4px;
     border-radius: 9999px;
     line-height: 1.2;
-}
-
-/* Dark mode badge adjustment */
-body.dark .rbc-day-bg.has-hearings::after {
-    background-color: #60a5fa;
-    /* lighter blue for dark mode */
 }

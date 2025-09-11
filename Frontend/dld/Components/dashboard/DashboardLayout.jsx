@@ -2,24 +2,19 @@
 import { useState } from "react"
 import Sidebar from "./Shared/Sidebar"
 import Topbar from "./Shared/Topbar"
-import LoadingBar from "nextjs-toploader";
-import { useApp } from "@/Context/Context.jsx"
+import LoadingBar from "nextjs-toploader"
 
 const DashboardLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true)
-  const { theme } = useApp()
-
-  // Theme-aware background classes
-  const layoutBg = theme === "light" ? "bg-gray-100" : "bg-gray-900"
-  const contentBg = theme === "light" ? "bg-white" : "bg-gray-800"
 
   return (
-    <div className={`min-h-screen -mt-[62px] flex ${layoutBg} transition-colors duration-300`}>
+    <div className="min-h-screen -mt-[62px] flex bg-gray-100 transition-colors duration-300">
       <LoadingBar
-        color="#2563eb"
+        color="#000"
         height={3}
         showSpinner={false}
       />
+
       {/* Sidebar */}
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
@@ -29,11 +24,12 @@ const DashboardLayout = ({ children }) => {
         <Topbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
         {/* Page Content */}
-        <main className="flex-1 overflow-auto p-6 md:p-8">
-          <div
-            className={`shadow-md rounded-lg p-6 min-h-[calc(100vh-64px)] transition-colors duration-300 ${contentBg}`}
-          >
-            {children}
+        <main className="flex-1 overflow-auto p-6 md:p-8 bg-gray-100">
+          {/* Children Container */}
+          <div className="flex justify-center md:justify-start">
+            <div className="w-full max-w-6xl bg-white shadow-md rounded-lg transition-colors duration-300 p-6 md:p-8">
+              {children}
+            </div>
           </div>
         </main>
       </div>

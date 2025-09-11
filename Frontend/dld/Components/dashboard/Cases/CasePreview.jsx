@@ -7,7 +7,7 @@ import DocumentViewer from "@/Components/dashboard/DocumentViewer.jsx"
 import CaseForm from "./CaseForm.jsx"
 import {
     FiArrowLeft, FiEdit, FiTrash2, FiFile, FiDownload, FiEye, FiCalendar, FiUser, FiMail,
-    FiPhone, FiMapPin, FiBriefcase, FiAward,FiBell
+    FiPhone, FiMapPin, FiBriefcase, FiAward, FiBell
 } from "react-icons/fi"
 import JSZip from "jszip"
 import { saveAs } from "file-saver"
@@ -18,9 +18,9 @@ import moment from "moment"
 const CasePreview = () => {
     const { id } = useParams()
     const router = useRouter()
-    const { Cases, addAlert, theme, Hearings } = useApp();
+    const { Cases, addAlert, Hearings } = useApp();
     const { getCase, delCase, setCases } = Cases
-    const { hearings} = Hearings
+    const { hearings } = Hearings
 
     const [caseData, setCaseData] = useState(null)
     const [caseHearings, setCaseHearings] = useState([])
@@ -53,11 +53,10 @@ const CasePreview = () => {
     const fetchCaseHearings = async () => {
         try {
             const filtered = hearings.filter(h => h?.caseId?._id === id)
-            // sort by start date
             filtered.sort((a, b) => new Date(a.startsAt) - new Date(b.startsAt))
             setCaseHearings(filtered)
         } catch (error) {
-            console.error("Failed to fetch hearings:")
+            console.error("Failed to fetch hearings:", error)
         }
     }
 
@@ -66,9 +65,9 @@ const CasePreview = () => {
             fetchCaseDetails()
             fetchCaseHearings()
         }
-    }, [id,hearings])
+    }, [id, hearings])
 
-    // del case
+    // Delete case
     const handleDeleteCase = async (caseId) => {
         setLoading(true)
         try {
@@ -88,7 +87,7 @@ const CasePreview = () => {
         }
     }
 
-    // download single file
+    // Download single file
     const handleDownloadSingle = (docUrl, originalName) => {
         try {
             saveAs(docUrl, originalName);
@@ -97,7 +96,7 @@ const CasePreview = () => {
         }
     }
 
-    // download all
+    // Download all files
     const handleDownloadAll = async () => {
         if (!caseData?.caseDocs || caseData.caseDocs.filter(doc => doc?.isShowing).length === 0) {
             addAlert({ type: "warning", message: "No visible documents to download." })
@@ -109,7 +108,6 @@ const CasePreview = () => {
 
         try {
             const zip = new JSZip()
-
             const visibleDocs = caseData.caseDocs.filter(doc => doc?.isShowing)
 
             const downloadPromises = visibleDocs.map(doc =>
@@ -118,16 +116,13 @@ const CasePreview = () => {
                         if (!res.ok) throw new Error(`Failed to fetch ${doc.originalName}`)
                         return res.blob()
                     })
-                    .then(blob => {
-                        zip.file(doc.originalName, blob)
-                    })
+                    .then(blob => zip.file(doc.originalName, blob))
             )
 
             await Promise.all(downloadPromises)
 
             const content = await zip.generateAsync({ type: "blob" })
             saveAs(content, `${caseData.caseTitle || "case"}-documents.zip`)
-
             addAlert({ type: "success", message: "Documents downloaded successfully!" })
 
         } catch (error) {
@@ -137,35 +132,34 @@ const CasePreview = () => {
         }
     }
 
-    // --- Theme classes ---
-    const bg = theme === 'light' ? 'bg-gray-50' : 'bg-gray-900';
-    const cardBg = theme === 'light' ? 'bg-white' : 'bg-gray-800';
-    const textPrimary = theme === 'light' ? 'text-gray-900' : 'text-white';
-    const textMuted = theme === 'light' ? 'text-gray-500' : 'text-gray-400';
-    const border = theme === 'light' ? 'border-gray-200' : 'border-gray-700';
-    const primaryBtn = theme === 'light' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white';
-    const destructiveBtn = theme === 'light' ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-red-500 hover:bg-red-600 text-white';
+    // Color classes (pure black/white/gray)
+    const bg = "bg-white"
+    const cardBg = "bg-white"
+    const textPrimary = "text-black"
+    const textMuted = "text-gray-600"
+    const border = "border border-gray-300"
+    const primaryBtn = "bg-black hover:bg-gray-800 text-white"
+    const destructiveBtn = "bg-red-600 hover:bg-red-700 text-white"
 
-    // --- Status and Type Colors (made case-insensitive) ---
     const getStatusColor = (status = "") => {
         switch (status) {
-            case "Open": return "bg-green-100 text-green-800"
-            case "In Progress": return "bg-yellow-100 text-yellow-800"
-            case "Closed": return "bg-gray-100 text-gray-800"
-            case "On Hold": return "bg-red-100 text-red-800"
-            default: return "bg-gray-100 text-gray-800"
+            case "Open": return "bg-gray-200 text-black"
+            case "In Progress": return "bg-gray-300 text-black"
+            case "Closed": return "bg-gray-400 text-black"
+            case "On Hold": return "bg-gray-500 text-black"
+            default: return "bg-gray-200 text-black"
         }
     }
 
     const getTypeColor = (type = "") => {
         switch (type.toLowerCase()) {
-            case "civil": return "bg-blue-100 text-blue-800"
-            case "criminal": return "bg-red-100 text-red-800"
-            case "corporate": return "bg-purple-100 text-purple-800"
-            case "family": return "bg-pink-100 text-pink-800"
-            case "tax": return "bg-indigo-100 text-indigo-800"
-            case "property": return "bg-green-100 text-green-800"
-            default: return "bg-gray-100 text-gray-800"
+            case "civil": return "bg-gray-200 text-black"
+            case "criminal": return "bg-gray-300 text-black"
+            case "corporate": return "bg-gray-400 text-black"
+            case "family": return "bg-gray-500 text-black"
+            case "tax": return "bg-gray-600 text-black"
+            case "property": return "bg-gray-700 text-white"
+            default: return "bg-gray-200 text-black"
         }
     }
 
@@ -173,14 +167,14 @@ const CasePreview = () => {
         return (
             <DashboardLayout>
                 <div className="p-6 animate-pulse">
-                    <div className="h-8 bg-gray-300 rounded w-1/3 mb-6"></div>
+                    <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2 space-y-6">
-                            <div className="h-40 bg-gray-300 rounded"></div>
-                            <div className="h-32 bg-gray-300 rounded"></div>
+                            <div className="h-40 bg-gray-200 rounded"></div>
+                            <div className="h-32 bg-gray-200 rounded"></div>
                         </div>
                         <div className="space-y-6">
-                            <div className="h-64 bg-gray-300 rounded"></div>
+                            <div className="h-64 bg-gray-200 rounded"></div>
                         </div>
                     </div>
                 </div>
@@ -219,7 +213,7 @@ const CasePreview = () => {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <button onClick={() => setShowEditForm(true)} className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
+                        <button onClick={() => setShowEditForm(true)} className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-black rounded-lg hover:bg-gray-300 transition-colors">
                             <FiEdit className="h-4 w-4" />
                             Edit
                         </button>
@@ -230,10 +224,11 @@ const CasePreview = () => {
                     </div>
                 </div>
 
+                {/* Main Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Main Content */}
+                    {/* Left Column */}
                     <div className="lg:col-span-2 space-y-6">
-                        {/* Basic Info */}
+                        {/* Case Info */}
                         <div className={`${cardBg} border ${border} rounded-lg p-6`}>
                             <h2 className={`text-xl font-semibold ${textPrimary} mb-4`}>Case Information</h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6">
@@ -272,34 +267,26 @@ const CasePreview = () => {
                             </p>
                         </div>
 
-                        {/* status his */}
+                        {/* Status History */}
                         {caseData?.statusHistory?.length > 0 && (
                             <div className={`${cardBg} border ${border} rounded-xl p-6 shadow-sm`}>
                                 <h2 className={`text-2xl font-semibold ${textPrimary} mb-6`}>Status History</h2>
-
                                 <div className="relative pl-6 border-l-2 border-gray-300">
-                                    {caseData.statusHistory
-                                        .slice() // clone array
-                                        .reverse() // show newest first
-                                        .map((s, idx) => (
-                                            <div key={idx} className="mb-6 relative">
-                                                <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                                                    <div>
-                                                        <span
-                                                            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
-                                                                s?.status || "Open"
-                                                            )}`}
-                                                        >
-                                                            {s.status}
-                                                        </span>
-                                                        {s?.note && <p className={`mt-1 text-sm ${textMuted}`}>{s.note}</p>}
-                                                    </div>
-                                                    <div className="text-xs text-gray-400 md:text-right">
-                                                        {s.changedAt ? formatDate(s.changedAt) : "Today"}
-                                                    </div>
+                                    {caseData.statusHistory.slice().reverse().map((s, idx) => (
+                                        <div key={idx} className="mb-6 relative">
+                                            <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                                                <div>
+                                                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(s?.status || "Open")}`}>
+                                                        {s.status}
+                                                    </span>
+                                                    {s?.note && <p className={`mt-1 text-sm ${textMuted}`}>{s.note}</p>}
+                                                </div>
+                                                <div className="text-xs text-gray-400 md:text-right">
+                                                    {s.changedAt ? formatDate(s.changedAt) : "Today"}
                                                 </div>
                                             </div>
-                                        ))}
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         )}
@@ -315,9 +302,7 @@ const CasePreview = () => {
                                                 <FiCalendar className={`h-5 w-5 ${textMuted}`} />
                                                 <div>
                                                     <p className={`font-medium ${textPrimary}`}>{h.title}</p>
-                                                    <p className={`text-sm ${textMuted}`}>
-                                                        {moment(h.startsAt).format("DD MMM YYYY, hh:mm A")}
-                                                    </p>
+                                                    <p className={`text-sm ${textMuted}`}>{moment(h.startsAt).format("DD MMM YYYY, hh:mm A")}</p>
                                                     <p className={`text-xs ${textMuted}`}>Duration: {h.durationMinutes} mins</p>
                                                     {h.subHandlerName && <p className={`text-xs ${textMuted}`}>Lawyer: {h.subHandlerName}</p>}
                                                     {h.notify && <p className={`text-xs ${textMuted}`}><FiBell className="inline" /> Reminder: {h.reminderOffsetMinutes} mins before</p>}
@@ -347,7 +332,7 @@ const CasePreview = () => {
                             </div>
                         )}
 
-                        {/* Assigned Lawyer Details */}
+                        {/* Lawyer Details */}
                         {caseData.lawyer && (
                             <div className={`${cardBg} border ${border} rounded-lg p-6`}>
                                 <h2 className={`text-xl font-semibold ${textPrimary} mb-4`}>Assigned Lawyer</h2>
@@ -395,6 +380,7 @@ const CasePreview = () => {
                     </div>
                 </div>
 
+                {/* Modals */}
                 <CaseForm
                     isOpen={showEditForm}
                     onClose={() => setShowEditForm(false)}
@@ -403,7 +389,6 @@ const CasePreview = () => {
                     isEdit={true}
                 />
 
-                {/* Document Viewer Modal */}
                 <DocumentViewer
                     isOpen={showDocumentViewer}
                     onClose={() => { setShowDocumentViewer(false); setSelectedDocument(null); }}
@@ -411,7 +396,6 @@ const CasePreview = () => {
                     documents={caseData.caseDocs}
                 />
 
-                {/* Delete Confirmation Modal */}
                 {showDeleteModal && (
                     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
                         <div className={`${cardBg} border ${border} rounded-lg p-6 w-full max-w-md`}>
@@ -420,7 +404,7 @@ const CasePreview = () => {
                                 Are you sure you want to delete "{caseData.caseTitle}"? This action cannot be undone.
                             </p>
                             <div className="flex justify-end gap-4">
-                                <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                                <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 bg-gray-200 text-black rounded-lg hover:bg-gray-300">
                                     Cancel
                                 </button>
                                 <button onClick={() => handleDeleteCase(caseData?._id)} className={`px-4 py-2 rounded-lg ${destructiveBtn}`}>

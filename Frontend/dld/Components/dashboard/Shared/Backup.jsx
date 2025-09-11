@@ -5,37 +5,29 @@ import DashboardLayout from "@/Components/dashboard/DashboardLayout.jsx";
 import DocumentViewer from "@/Components/dashboard/DocumentViewer.jsx";
 import BackupSkeleton from "@/Components/Skeletons/BackupSkeleton.jsx";
 import {
-    FiHardDrive, FiRefreshCw, FiDownload, FiEye, FiAlertCircle, FiCheckCircle, FiSearch,
+    FiHardDrive,
+    FiRefreshCw,
+    FiDownload,
+    FiEye,
+    FiAlertCircle,
+    FiCheckCircle,
+    FiSearch,
 } from "react-icons/fi";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 
 const Backup = () => {
-    const { addAlert, theme, Cases } = useApp();
+    const { addAlert, Cases } = useApp();
     const { getCases, restoreFiles } = Cases || {};
     const [casesData, setCasesData] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    // selection map: { [caseId]: Set(publicId) }
     const [selectedMap, setSelectedMap] = useState({});
     const [search, setSearch] = useState("");
 
-    // viewer state
     const [showViewer, setShowViewer] = useState(false);
     const [viewerDocs, setViewerDocs] = useState([]);
     const [viewerIndex, setViewerIndex] = useState(0);
-
-    const isDark = theme === "dark";
-    const bgColor = isDark ? "bg-gray-950 text-gray-100" : "bg-white text-gray-900";
-    const cardBg = isDark ? "bg-gray-900 border border-gray-800" : "bg-gray-50 border border-gray-200";
-    const headerText = isDark ? "text-white" : "text-gray-900";
-    const subText = isDark ? "text-gray-400" : "text-gray-600";
-    const chipOn = isDark ? "bg-emerald-900/40 text-emerald-300 border border-emerald-700/50" : "bg-emerald-50 text-emerald-700 border border-emerald-200";
-    const chipOff = isDark ? "bg-red-900/40 text-red-300 border border-red-700/50" : "bg-red-50 text-red-700 border border-red-200";
-    const btnPrimary = isDark ? "bg-blue-600 hover:bg-blue-500 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
-    const btnGhost = isDark ? "bg-gray-800 hover:bg-gray-700 text-gray-100" : "bg-white hover:bg-gray-100 text-gray-800 border border-gray-200";
-    const btnRefresh = isDark ? "bg-gray-700 hover:bg-gray-600 text-white" : "bg-gray-200 hover:bg-gray-300 text-gray-900";
-    const actionIcon = isDark ? "text-gray-300 hover:text-white hover:bg-gray-700" : "text-gray-600 hover:text-gray-900 hover:bg-gray-200";
 
     useEffect(() => {
         fetchCases();
@@ -52,7 +44,7 @@ const Backup = () => {
             } else {
                 addAlert({ type: "error", message: result?.error || "Failed to fetch cases" });
             }
-        } catch (e) {
+        } catch {
             addAlert({ type: "error", message: "Failed to fetch cases" });
         } finally {
             setLoading(false);
@@ -65,7 +57,11 @@ const Backup = () => {
         return casesData.filter((c) => {
             const title = String(c?.caseTitle || "").toLowerCase();
             const clientName = String(c?.client?.name || c?.client?.fullName || "").toLowerCase();
-            return title.includes(q) || clientName.includes(q) || c?.caseDocs?.some(d => String(d?.originalName || "").toLowerCase().includes(q));
+            return (
+                title.includes(q) ||
+                clientName.includes(q) ||
+                c?.caseDocs?.some((d) => String(d?.originalName || "").toLowerCase().includes(q))
+            );
         });
     }, [casesData, search]);
 
@@ -99,8 +95,7 @@ const Backup = () => {
             return;
         }
 
-        const payload = { caseId: caseItem._id, publicIds: hiddenIds }
-        const res = await restoreFiles?.(payload);
+        const res = await restoreFiles?.({ caseId: caseItem._id, publicIds: hiddenIds });
         if (res?.success === false) {
             addAlert({ type: "error", message: res?.error || "Restore failed" });
             return;
@@ -168,10 +163,7 @@ const Backup = () => {
 
     const openViewer = (docs, startDocPublicId) => {
         const list = docs || [];
-        const startIndex = Math.max(
-            0,
-            list.findIndex((d) => d?.publicId === startDocPublicId)
-        );
+        const startIndex = Math.max(0, list.findIndex((d) => d?.publicId === startDocPublicId));
         setViewerDocs(list);
         setViewerIndex(startIndex === -1 ? 0 : startIndex);
         setShowViewer(true);
@@ -187,29 +179,32 @@ const Backup = () => {
 
     return (
         <DashboardLayout>
-            <div className={`min-h-screen p-4 md:p-6 ${bgColor}`}>
+            <div className="min-h-screen p-4 md:p-6 bg-white text-black">
                 {/* Header */}
-                <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
                     <div className="flex items-center gap-3">
-                        <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${isDark ? "bg-gray-900" : "bg-gray-100"}`}>
-                            <FiHardDrive className="h-6 w-6" />
+                        <div className="h-12 w-12 rounded-xl flex items-center justify-center bg-gray-100">
+                            <FiHardDrive className="h-6 w-6 text-black" />
                         </div>
                         <div>
-                            <h1 className={`text-2xl md:text-3xl font-bold ${headerText}`}>Case Backups</h1>
-                            <p className={`${subText}`}>View, preview, restore and download all case files.</p>
+                            <h1 className="text-2xl md:text-3xl font-bold">Case Backups</h1>
+                            <p className="text-gray-600">View, preview, restore and download all case files.</p>
                         </div>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                        <div className={`flex items-center gap-2 rounded-lg px-3 py-2 w-full sm:w-72 ${isDark ? "bg-gray-900 border border-gray-800" : "bg-white border border-gray-200"}`}>
-                            <FiSearch className={`${subText}`} />
+                        <div className="flex items-center gap-2 rounded-lg px-3 py-2 w-full sm:w-72 bg-white border border-gray-200">
+                            <FiSearch className="text-gray-600" />
                             <input
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search cases or files…"
-                                className={`w-full bg-transparent outline-none ${headerText} placeholder:${subText}`}
+                                className="w-full bg-transparent outline-none text-black placeholder-gray-400"
                             />
                         </div>
-                        <button onClick={fetchCases} className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg ${btnRefresh}`}>
+                        <button
+                            onClick={fetchCases}
+                            className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 text-black"
+                        >
                             <FiRefreshCw className="h-4 w-4" />
                             Refresh
                         </button>
@@ -224,40 +219,36 @@ const Backup = () => {
                         ))}
                     </div>
                 ) : filteredCases?.length === 0 ? (
-                    <div className={`flex flex-col items-center justify-center p-12 rounded-2xl ${cardBg}`}>
-                        <FiAlertCircle className={`h-12 w-12 ${subText}`} />
-                        <h3 className={`mt-4 text-xl font-semibold ${headerText}`}>No Cases Found</h3>
-                        <p className={`${subText} mt-1`}>Create a case to see documents here.</p>
+                    <div className="flex flex-col items-center justify-center p-12 rounded-2xl bg-gray-50 border border-gray-200">
+                        <FiAlertCircle className="h-12 w-12 text-gray-400" />
+                        <h3 className="mt-4 text-xl font-semibold">No Cases Backup Found</h3>
+                        <p className="text-gray-600 mt-1">Create a case to see documents here.</p>
                     </div>
                 ) : (
                     <div className="space-y-6">
                         {filteredCases.map((c) => {
                             const docs = Array.isArray(c?.caseDocs) ? c.caseDocs : [];
                             const hiddenCount = docs.filter((d) => d?.isShowing === false).length;
-                            const selectedCount = (selectedMap[c._id]?.size || 0);
+                            const selectedCount = selectedMap[c._id]?.size || 0;
 
                             return (
-                                <div key={c._id} className={`rounded-2xl p-5 md:p-6 ${cardBg}`}>
+                                <div key={c._id} className="rounded-2xl p-5 md:p-6 bg-gray-50 border border-gray-200">
                                     {/* Case Header */}
-                                    <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                                    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
                                         <div className="min-w-0">
-                                            <h3 className={`text-lg md:text-xl font-semibold ${headerText} truncate`}>{c?.caseTitle || "Untitled Case"}</h3>
+                                            <h3 className="text-lg md:text-xl font-semibold truncate">{c?.caseTitle || "Untitled Case"}</h3>
                                             <div className="flex flex-wrap items-center gap-2 mt-1">
-                                                <span className={`text-xs px-2 py-1 rounded-full ${chipOn}`}>
-                                                    Total: {docs.length}
-                                                </span>
-                                                <span className={`text-xs px-2 py-1 rounded-full ${hiddenCount ? chipOff : chipOn}`}>
+                                                <span className="text-xs px-2 py-1 rounded-full bg-gray-100 border border-gray-300">Total: {docs.length}</span>
+                                                <span className={`text-xs px-2 py-1 rounded-full ${hiddenCount ? "bg-red-50 text-red-700 border border-red-200" : "bg-gray-100 text-black border border-gray-300"}`}>
                                                     Hidden: {hiddenCount}
                                                 </span>
-                                                <span className={`text-xs px-2 py-1 rounded-full ${isDark ? "bg-gray-800 text-gray-300 border border-gray-700" : "bg-white text-gray-700 border border-gray-200"}`}>
-                                                    Selected: {selectedCount}
-                                                </span>
+                                                <span className="text-xs px-2 py-1 rounded-full bg-gray-100 border border-gray-300">Selected: {selectedCount}</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-wrap gap-2">
                                             <button
                                                 onClick={() => handleDownloadAllZip(c)}
-                                                className={`px-3 md:px-4 py-2 rounded-lg inline-flex items-center gap-2 ${btnGhost}`}
+                                                className="px-3 md:px-4 py-2 rounded-lg inline-flex items-center gap-2 bg-white border border-gray-200 hover:bg-gray-100 text-black"
                                                 title="Download all documents as ZIP"
                                             >
                                                 <FiDownload className="h-4 w-4" />
@@ -268,7 +259,7 @@ const Backup = () => {
                                                 <>
                                                     <button
                                                         onClick={() => handleRestoreAll(c)}
-                                                        className={`px-3 md:px-4 py-2 rounded-lg inline-flex items-center gap-2 ${btnPrimary}`}
+                                                        className="px-3 md:px-4 py-2 rounded-lg inline-flex items-center gap-2 bg-black text-white hover:bg-gray-900"
                                                     >
                                                         <FiCheckCircle className="h-4 w-4" />
                                                         <span className="hidden sm:inline">Restore All Hidden</span>
@@ -276,7 +267,7 @@ const Backup = () => {
                                                     </button>
                                                     <button
                                                         onClick={() => handleRestoreSelected(c)}
-                                                        className={`px-3 md:px-4 py-2 rounded-lg inline-flex items-center gap-2 ${btnPrimary}`}
+                                                        className="px-3 md:px-4 py-2 rounded-lg inline-flex items-center gap-2 bg-black text-white hover:bg-gray-900 disabled:opacity-50"
                                                         disabled={selectedCount === 0}
                                                     >
                                                         <FiCheckCircle className="h-4 w-4" />
@@ -289,53 +280,52 @@ const Backup = () => {
                                     </div>
 
                                     {/* Documents Grid */}
-                                    <div className={`mt-4 md:mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 md:gap-4`}>
+                                    <div className="mt-4 md:mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3 md:gap-4">
                                         {docs.map((doc) => {
                                             const isHidden = doc?.isShowing === false;
                                             const isSelected = Boolean(selectedMap[c._id]?.has(doc?.publicId));
                                             return (
                                                 <div
                                                     key={doc?.publicId || doc?.docUrl}
-                                                    className={`group rounded-xl p-3 border ${isDark ? "border-gray-800 bg-gray-900 hover:bg-gray-850" : "border-gray-200 bg-white hover:bg-gray-50"} transition`}
+                                                    className="group rounded-xl p-3 border border-gray-200 bg-white hover:bg-gray-50 transition"
                                                 >
                                                     <div className="flex items-start justify-between gap-2">
                                                         <div className="flex items-center gap-3 min-w-0">
                                                             <span className="text-xl leading-none">{getFileEmoji(doc?.mimeType)}</span>
                                                             <div className="min-w-0">
-                                                                <p className={`text-sm font-medium truncate ${headerText}`} title={doc?.originalName || "document"}>
+                                                                <p className="text-sm font-medium truncate" title={doc?.originalName || "document"}>
                                                                     {doc?.originalName || "document"}
                                                                 </p>
-                                                                <p className={`text-xs ${subText} truncate`} title={doc?.mimeType}>
+                                                                <p className="text-xs text-gray-600 truncate" title={doc?.mimeType}>
                                                                     {doc?.mimeType || "unknown"} · {doc?.fileSize ? `${Math.max(1, Math.round(doc.fileSize / 1024))} KB` : "--"}
                                                                 </p>
                                                             </div>
                                                         </div>
 
-                                                        {/* Checkbox only when hidden */}
                                                         {isHidden ? (
                                                             <input
                                                                 type="checkbox"
-                                                                className="mt-1 h-4 w-4 accent-blue-600"
+                                                                className="mt-1 h-4 w-4 accent-black"
                                                                 checked={isSelected}
                                                                 onChange={(e) => setChecked(c._id, doc?.publicId, e.target.checked)}
                                                                 title="Select for restore"
                                                             />
                                                         ) : (
-                                                            <span className={`mt-0.5 text-[10px] px-1.5 py-0.5 rounded-full ${chipOn}`}>Visible</span>
+                                                            <span className="mt-0.5 text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-black border border-gray-300">Visible</span>
                                                         )}
                                                     </div>
 
                                                     <div className="mt-3 flex items-center justify-end gap-1">
                                                         <button
                                                             onClick={() => openViewer(docs, doc?.publicId)}
-                                                            className={`p-2 rounded-lg transition ${actionIcon}`}
+                                                            className="p-2 rounded-lg hover:bg-gray-100 transition text-black"
                                                             title="Preview"
                                                         >
                                                             <FiEye className="h-4 w-4" />
                                                         </button>
                                                         <button
                                                             onClick={() => handleDownloadSingle(doc)}
-                                                            className={`p-2 rounded-lg transition ${actionIcon}`}
+                                                            className="p-2 rounded-lg hover:bg-gray-100 transition text-black"
                                                             title="Download"
                                                         >
                                                             <FiDownload className="h-4 w-4" />

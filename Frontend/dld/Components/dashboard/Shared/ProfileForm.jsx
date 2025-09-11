@@ -8,11 +8,11 @@ const ProfileForm = ({ isOpen, onClose }) => {
   const router = useRouter();
   const [formLoading, setFormLoading] = useState(false);
   const [avatarLoading, setAvatarLoading] = useState(false);
-  const { userData, setUserData, addAlert, theme, userAuth, userImage, userProfile } = useApp();
+  const { userData, setUserData, addAlert, userAuth, userImage, userProfile } = useApp();
   const user = userData;
   const { updateAvatar, editProfile } = userAuth;
   const { image, setImage } = userImage;
-  const { setIsEditProfile } = userProfile
+  const { setIsEditProfile } = userProfile;
   const [avatarUpdated, setAvatarUpdated] = useState(false);
   const [avatarFile, setAvatarFile] = useState(null);
 
@@ -50,7 +50,6 @@ const ProfileForm = ({ isOpen, onClose }) => {
     }
   };
 
-  // change avatar in db
   const handleChangeAvatar = async () => {
     if (!avatarFile) return;
     try {
@@ -62,14 +61,12 @@ const ProfileForm = ({ isOpen, onClose }) => {
         setAvatarUpdated(true);
       }
     } catch (error) {
-      addAlert("error", "Internal server error during edit profile" || error.message)
+      addAlert("error", "Internal server error during avatar update");
     } finally {
       setAvatarLoading(false);
     }
   };
 
-
-  // submit profile form
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormLoading(true);
@@ -79,14 +76,14 @@ const ProfileForm = ({ isOpen, onClose }) => {
       addAlert(data);
       if (data.statusCode === 201) {
         localStorage.setItem("email", payload.email);
-        setIsEditProfile(true)
+        setIsEditProfile(true);
         router.push("/email-verify");
       }
       if (data.statusCode === 200) {
-        setUserData(data.data)
+        setUserData(data.data);
       }
     } catch (error) {
-      addAlert("error", "Internal server error during edit profile" || error.message)
+      addAlert("error", "Internal server error during profile update");
     } finally {
       setFormLoading(false);
     }
@@ -94,33 +91,19 @@ const ProfileForm = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  // Theme classes
-  const bg = theme === "light" ? "bg-white" : "bg-gray-800";
-  const border = theme === "light" ? "border-gray-200" : "border-gray-700";
-  const inputBg = theme === "light" ? "bg-white" : "bg-gray-700";
-  const inputText = theme === "light" ? "text-gray-900" : "text-gray-100";
-  const mutedText = theme === "light" ? "text-gray-500" : "text-gray-400";
-
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div
-        className={`rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto ${bg} border ${border} shadow-xl`}
-      >
+    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-2 sm:p-4 overflow-auto">
+      <div className="w-full max-w-2xl rounded-2xl shadow-xl p-6 bg-white border border-black max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className={`flex justify-between items-center p-6 border-b ${border}`}>
-          <h2 className={`text-xl font-semibold ${inputText}`}>Edit Profile</h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className={`${mutedText} hover:${inputText} transition-colors`}
-          >
+        <div className="flex justify-between items-center mb-6 border-b border-black pb-3">
+          <h2 className="text-xl font-semibold text-black">Edit Profile</h2>
+          <button onClick={onClose} className="text-black hover:text-gray-700 transition">
             <FiX className="h-6 w-6" />
           </button>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Avatar Upload */}
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Avatar Upload */}
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
@@ -128,20 +111,17 @@ const ProfileForm = ({ isOpen, onClose }) => {
                 <img
                   src={image || user?.avatar?.avatarUrl || "/placeholder.svg"}
                   alt="Avatar preview"
-                  className={`h-24 w-24 rounded-full object-cover border-4 ${border}`}
+                  className="h-24 w-24 rounded-full object-cover border-4 border-black"
                 />
               ) : (
-                <div
-                  className={`h-24 w-24 rounded-full ${inputBg} border-4 ${border} flex items-center justify-center`}
-                >
-                  <FiUser className={`h-8 w-8 ${mutedText}`} />
+                <div className="h-24 w-24 rounded-full border-4 border-black flex items-center justify-center bg-gray-100">
+                  <FiUser className="h-8 w-8 text-gray-700" />
                 </div>
               )}
 
-              {/* Upload Icon */}
               <label
                 htmlFor="avatar-upload"
-                className="absolute bottom-0 right-0 h-8 w-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center cursor-pointer hover:bg-primary/90 transition-colors"
+                className="absolute bottom-0 right-0 h-8 w-8 bg-black text-white rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-800 transition"
               >
                 <FiUpload className="h-4 w-4" />
               </label>
@@ -154,25 +134,23 @@ const ProfileForm = ({ isOpen, onClose }) => {
               />
             </div>
 
-            {/* File name display */}
             {avatarFile && (
-              <p className={`text-sm ${inputText}`}>
+              <p className="text-sm text-black">
                 Selected: <span className="font-medium">{avatarFile.name}</span>
               </p>
             )}
 
-            {/* Update Button */}
             <button
               type="button"
               onClick={handleChangeAvatar}
               disabled={!avatarFile || avatarLoading || avatarUpdated}
-              className="px-4 py-1 bg-primary text-primary-foreground text-sm rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="px-4 py-1 bg-black text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 flex items-center gap-2 text-sm"
             >
               {avatarLoading && <FiLoader className="animate-spin text-sm" />}
               {avatarLoading ? "Uploading..." : avatarUpdated ? "Updated ✅" : "Update Avatar"}
             </button>
 
-            <p className={`text-sm ${mutedText}`}>
+            <p className="text-sm text-gray-500 text-center">
               Click the icon to choose a file, then update your avatar
             </p>
           </div>
@@ -180,8 +158,8 @@ const ProfileForm = ({ isOpen, onClose }) => {
           {/* Fields */}
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className={`block text-sm font-medium ${inputText} mb-2`}>
-                Full Name <span className="text-destructive">*</span>
+              <label className="block text-sm font-medium text-black mb-2">
+                Full Name <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
@@ -189,14 +167,14 @@ const ProfileForm = ({ isOpen, onClose }) => {
                 value={formData.fullName}
                 onChange={handleInputChange}
                 required
-                className={`w-full px-3 py-2 ${inputBg} border ${border} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${inputText}`}
+                className="w-full px-3 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
                 placeholder="Enter your full name"
               />
             </div>
 
             <div>
-              <label className={`block text-sm font-medium ${inputText} mb-2`}>
-                Username <span className="text-destructive">*</span>
+              <label className="block text-sm font-medium text-black mb-2">
+                Username <span className="text-red-600">*</span>
               </label>
               <input
                 type="text"
@@ -204,14 +182,14 @@ const ProfileForm = ({ isOpen, onClose }) => {
                 value={formData.userName}
                 onChange={handleInputChange}
                 required
-                className={`w-full px-3 py-2 ${inputBg} border ${border} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${inputText}`}
+                className="w-full px-3 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
                 placeholder="Enter your username"
               />
             </div>
 
             <div>
-              <label className={`block text-sm font-medium ${inputText} mb-2`}>
-                Email Address <span className="text-destructive">*</span>
+              <label className="block text-sm font-medium text-black mb-2">
+                Email Address <span className="text-red-600">*</span>
               </label>
               <input
                 type="email"
@@ -219,7 +197,7 @@ const ProfileForm = ({ isOpen, onClose }) => {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className={`w-full px-3 py-2 ${inputBg} border ${border} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${inputText}`}
+                className="w-full px-3 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
                 placeholder="Enter your email address"
               />
             </div>
@@ -227,60 +205,54 @@ const ProfileForm = ({ isOpen, onClose }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className={`block text-sm font-medium ${inputText} mb-2`}>
-                Phone Number
-              </label>
+              <label className="block text-sm font-medium text-black mb-2">Phone Number</label>
               <input
                 type="tel"
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
-                className={`w-full px-3 py-2 ${inputBg} border ${border} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${inputText}`}
+                className="w-full px-3 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
                 placeholder="Enter your phone number"
               />
             </div>
 
             <div>
-              <label className={`block text-sm font-medium ${inputText} mb-2`}>
-                Role
-              </label>
+              <label className="block text-sm font-medium text-black mb-2">Role</label>
               <input
                 type="text"
                 value={user?.role || ""}
                 disabled
-                className={`w-full px-3 py-2 ${inputBg} border ${border} rounded-lg text-muted-foreground cursor-not-allowed`}
+                className="w-full px-3 py-2 border border-black rounded-lg text-gray-500 bg-gray-100 cursor-not-allowed"
                 placeholder="Role (cannot be changed)"
               />
             </div>
           </div>
 
           <div>
-            <label className={`block text-sm font-medium ${inputText} mb-2`}>
-              Address
-            </label>
+            <label className="block text-sm font-medium text-black mb-2">Address</label>
             <textarea
               name="address"
               value={formData.address}
               onChange={handleInputChange}
               rows={3}
-              className={`w-full px-3 py-2 ${inputBg} border ${border} rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${inputText}`}
+              className="w-full px-3 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black text-black bg-white"
               placeholder="Enter your address"
             />
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-4 pt-4 border-t border-border">
+          <div className="flex justify-end gap-4 pt-4 border-t border-black">
             <button
               type="button"
               onClick={onClose}
-              className={`px-4 py-2 ${mutedText} hover:${inputText} transition-colors`}
+              className="px-4 py-2 text-black hover:text-gray-700 transition rounded-lg"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={formLoading}
-              className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2"
+              className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition disabled:opacity-50 flex items-center gap-2"
             >
               {formLoading && <FiLoader className="animate-spin text-sm" />}
               {formLoading ? "Updating..." : "Update Profile"}

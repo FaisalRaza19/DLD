@@ -3,26 +3,26 @@ import { useState, useRef, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { useApp } from "@/Context/Context.jsx"
 import {
-  FiSearch, FiMessageCircle, FiSun, FiMoon, FiUser, FiLogOut, FiChevronDown, FiBell
+  FiSearch, FiMessageCircle, FiUser, FiLogOut, FiChevronDown, FiBell
 } from "react-icons/fi"
 import Chatbot from "./Chatbot.jsx"
 import Link from "next/link"
-import Notifications from "./Notification.jsx";
+import Notifications from "./Notification.jsx"
 
 function useOnClickOutside(ref, handler) {
   useEffect(() => {
     const listener = (event) => {
-      if (!ref.current || ref.current.contains(event.target)) return;
-      handler(event);
-    };
-    document.addEventListener("mousedown", listener);
-    return () => document.removeEventListener("mousedown", listener);
-  }, [ref, handler]);
+      if (!ref.current || ref.current.contains(event.target)) return
+      handler(event)
+    }
+    document.addEventListener("mousedown", listener)
+    return () => document.removeEventListener("mousedown", listener)
+  }, [ref, handler])
 }
 
 const Topbar = () => {
   const router = useRouter()
-  const { userData, theme, toggleTheme, userAuth, addAlert, verifyUser, Cases, Lawyers, Clients, Hearings } = useApp()
+  const { userData, userAuth, addAlert, verifyUser, Cases, Lawyers, Clients, Hearings } = useApp()
   const { unReadNotifications } = Hearings
   const { cases } = Cases
   const { clients } = Clients
@@ -38,11 +38,11 @@ const Topbar = () => {
   const [showUserDropdown, setShowUserDropdown] = useState(false)
   const [showChatbot, setShowChatbot] = useState(false)
   const [isSearching, setIsSearching] = useState(false)
-  const [showNotifications, setShowNotifications] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false)
 
   const searchRef = useRef(null)
   const userDropdownRef = useRef(null)
-  const notificationsRef = useRef(null);
+  const notificationsRef = useRef(null)
   const debounceTimer = useRef(null)
 
   // 🔹 Handle logout
@@ -160,54 +160,35 @@ const Topbar = () => {
     }
   }
 
-  const getResultColor = (type) => {
-    switch (type) {
-      case "case": return theme === "light" ? "bg-blue-100 text-blue-800" : "bg-blue-900 text-blue-200"
-      case "client": return theme === "light" ? "bg-green-100 text-green-800" : "bg-green-900 text-green-200"
-      case "lawyer": return theme === "light" ? "bg-purple-100 text-purple-800" : "bg-purple-900 text-purple-200"
-      default: return theme === "light" ? "bg-gray-100 text-gray-800" : "bg-gray-900 text-gray-200"
-    }
-  }
+  const topbarBg = "bg-white border-b border-gray-300 text-black"
+  const inputBg = "bg-gray-100 border border-gray-300 text-black placeholder-gray-400"
+  const dropdownBg = "bg-white border border-gray-300 text-black"
+  const accentHover = "hover:bg-gray-200"
 
-  // 🔹 Theme styles
-  const topbarBg = theme === "light"
-    ? "bg-white border-b border-gray-200 text-gray-800"
-    : "bg-gray-900 border-b border-gray-700 text-gray-100"
-
-  const inputBg = theme === "light"
-    ? "bg-gray-100 border-gray-300 text-gray-800 placeholder-gray-400"
-    : "bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400"
-
-  const dropdownBg = theme === "light"
-    ? "bg-white border border-gray-200 text-gray-800"
-    : "bg-gray-800 border border-gray-700 text-gray-100"
-
-  const accentHover = theme === "light" ? "hover:bg-gray-200" : "hover:bg-gray-700"
-
-  useOnClickOutside(userDropdownRef, () => setShowUserDropdown(false));
+  useOnClickOutside(userDropdownRef, () => setShowUserDropdown(false))
 
   return (
     <div className={`h-16 flex items-center justify-between px-6 ${topbarBg}`}>
       {/* 🔍 Search */}
       <div className="flex-1 max-w-md relative" ref={searchRef}>
         <div className="relative">
-          <FiSearch className={`absolute left-3 top-1/2 -translate-y-1/2 ${theme === "light" ? "text-gray-500" : "text-gray-400"} h-4 w-4`} />
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 h-4 w-4" />
           <input
             type="text"
             placeholder="Search cases, clients, lawyers..."
             value={searchQuery}
             onChange={handleSearchInputChange}
-            className={`w-full pl-10 pr-10 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${inputBg}`}
+            className={`w-full pl-10 pr-10 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-black ${inputBg}`}
           />
           {isSearching && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">
-              <div className="animate-spin h-4 w-4 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+              <div className="animate-spin h-4 w-4 border-2 border-black border-t-transparent rounded-full"></div>
             </div>
           )}
         </div>
 
         {showSearchResults && (
-          <div className={`absolute top-full left-0 right-0 mt-1 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto ${dropdownBg}`}>
+          <div className="absolute top-full left-0 right-0 mt-1 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto bg-white border border-gray-300">
             {searchResults.length === 0 ? (
               <div className="p-4 text-center text-gray-500">{isSearching ? "Searching..." : "No results found"}</div>
             ) : (
@@ -224,16 +205,12 @@ const Topbar = () => {
                     className={`w-full px-4 py-3 flex items-center gap-3 border-b last:border-b-0 transition-colors ${accentHover}`}
                   >
                     <span className="text-lg">{getResultIcon(result.type)}</span>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getResultColor(result.type)}`}>
-                      {result.type}
-                    </span>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">{result.title}</p>
                       <p className="text-sm truncate">{result.description}</p>
                     </div>
                   </Link>
                 ))}
-
               </>
             )}
           </div>
@@ -258,47 +235,39 @@ const Topbar = () => {
           </button>
         </div>
 
-        {showNotifications && (
-          <Notifications onClose={() => setShowNotifications(false)} />
-        )}
+        {showNotifications && <Notifications onClose={() => setShowNotifications(false)} />}
 
         {/* Chatbot */}
-        <button onClick={() => setShowChatbot(true)} className={`p-2 rounded-lg relative ${accentHover}`} title="Open Legal Assistant">
+        <button onClick={() => setShowChatbot(true)} className="p-2 rounded-lg hover:bg-gray-200" title="Open Legal Assistant">
           <FiMessageCircle className="h-5 w-5" />
-          <span className="absolute -top-1 -right-1 h-3 w-3 bg-blue-500 rounded-full animate-pulse"></span>
-        </button>
-
-        {/* Theme toggle */}
-        <button onClick={toggleTheme} className={`p-2 rounded-lg ${accentHover}`} title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}>
-          {theme === "light" ? <FiMoon className="h-5 w-5" /> : <FiSun className="h-5 w-5" />}
         </button>
 
         {/* User dropdown */}
         <div className="relative" ref={userDropdownRef}>
-          <button onClick={() => setShowUserDropdown(!showUserDropdown)} className={`flex items-center gap-2 p-2 rounded-lg ${accentHover}`}>
-            <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center">
-              <span className="text-white text-sm font-semibold">{user?.fullName?.charAt(0) || "U"}</span>
+          <button onClick={() => setShowUserDropdown(!showUserDropdown)} className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-200">
+            <div className="h-8 w-8 rounded-full bg-black flex items-center justify-center text-white">
+              <span className="text-sm font-semibold">{user?.fullName?.charAt(0) || "U"}</span>
             </div>
-            <span className="hidden md:block">{user?.fullName || "User"}</span>
-            <FiChevronDown className="h-4 w-4" />
+            <span className="hidden md:block text-black">{user?.fullName || "User"}</span>
+            <FiChevronDown className="h-4 w-4 text-black" />
           </button>
 
           {showUserDropdown && (
             <div className={`absolute top-full right-0 mt-1 w-56 rounded-lg shadow-xl z-50 ${dropdownBg}`}>
-              <div className="p-3 border-b">
+              <div className="p-3 border-b border-gray-300">
                 <p className="font-medium">{user?.fullName}</p>
                 <p className="text-sm">{user?.email}</p>
                 <p className="text-xs capitalize">{user?.role}</p>
               </div>
               <div className="py-1">
                 <Link href="/dashboard/settings" onClick={() => setShowUserDropdown(false)}>
-                  <span className={`w-full px-3 py-2 flex items-center gap-2 cursor-pointer ${accentHover}`}>
+                  <span className="w-full px-3 py-2 flex items-center gap-2 cursor-pointer hover:bg-gray-200">
                     <FiUser className="h-4 w-4" /> Profile & Settings
                   </span>
                 </Link>
                 <button
                   onClick={handleLogOut}
-                  className={`w-full px-3 py-2 flex items-center gap-2 text-red-500 ${accentHover}`}
+                  className="w-full px-3 py-2 flex items-center gap-2 text-red-500 hover:bg-gray-200"
                 >
                   <FiLogOut className="h-4 w-4" /> Logout
                 </button>

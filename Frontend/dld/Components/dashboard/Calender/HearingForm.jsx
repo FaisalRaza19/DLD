@@ -3,14 +3,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useApp } from "@/Context/Context.jsx";
 import { FiX, FiLoader, FiTrash2 } from "react-icons/fi";
 import moment from "moment";
-import "./CalendarStyles.css"
-
+import "./CalendarStyles.css";
 
 const HearingForm = ({ isOpen, onClose, hearingData = null, isEdit = false }) => {
-    const { userData, theme, addAlert, Cases, Lawyers, Hearings } = useApp();
+    const { userData, addAlert, Cases, Lawyers, Hearings } = useApp();
     const { cases } = Cases;
     const { lawyers } = Lawyers;
-    const { addHearing, editHearing, delHearing, setHearings, setUnReadNotifications, setUnreadMessages, } = Hearings;
+    const { addHearing, editHearing, delHearing, setHearings, setUnReadNotifications, setUnreadMessages } = Hearings;
 
     const [form, setForm] = useState({});
     const [loading, setLoading] = useState(false);
@@ -92,14 +91,14 @@ const HearingForm = ({ isOpen, onClose, hearingData = null, isEdit = false }) =>
         }
         if (!isEdit) {
             if (startsAtMoment.diff(moment(), "minutes") < 120) {
-                addAlert({ type: "error", message: "Start time must be at least 2 hours from now." });
-                return false;
-            }
+            addAlert({ type: "error", message: "Start time must be at least 2 hours from now." });
+            return false;
+        }
         } else {
             // For full edit in edit mode ensure still allowed to modify time (we already checked allowFullEdit on init)
             if (!allowFullEdit && startsAtMoment.diff(moment(), "minutes") < 120) {
-                addAlert({ type: "error", message: "Cannot set start time less than 2 hours from now in this edit mode." });
-                return false;
+            addAlert({ type: "error", message: "Cannot set start time less than 2 hours from now in this edit mode." });
+            return false;
             }
         }
         return true;
@@ -177,7 +176,6 @@ const HearingForm = ({ isOpen, onClose, hearingData = null, isEdit = false }) =>
                 };
 
                 const result = await addHearing(payload);
-                // Your addHearing earlier returned `.statusCode === 200` or `.success` — handle both
                 if (result?.statusCode === 200 || result?.success) {
                     setHearings(prev => [...(prev || []), result.data || payload]);
                     if (typeof setUnreadMessages === "function") setUnreadMessages(prev => (typeof prev === "number" ? prev + 1 : prev + 1));
@@ -218,188 +216,91 @@ const HearingForm = ({ isOpen, onClose, hearingData = null, isEdit = false }) =>
 
     if (!isOpen) return null;
 
-    const inputClass = theme === "light"
-        ? "text-black border-gray-300"
-        : "bg-gray-900 border-gray-700 text-gray-100";
+    const inputClass = "w-full px-3 py-2 rounded-lg border border-gray-400 text-black focus:outline-none focus:ring-2 focus:ring-black";
 
-    const text = theme === "light" ? "text-black" : "text-lg"
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-auto">
-            <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-lg shadow-lg">
-                <form
-                    onSubmit={handleSubmit}
-                    className={`w-full p-6 rounded-lg flex flex-col gap-4 ${theme === "light" ? "bg-white" : "bg-gray-800"}`}
-                >
+            <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white rounded-lg shadow-lg p-6 flex flex-col gap-4">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex justify-between items-center">
-                        <h2 className={`${text} md:text-xl font-semibold`}>
-                            {isEdit ? "Edit Hearing" : "Add Hearing"}
-                        </h2>
-                        <button type="button" onClick={onClose} className={`${text} p-1 rounded hover:bg-gray-200`}>
-                            <FiX className="w-5 h-5" />
+                        <h2 className="text-black text-xl font-semibold">{isEdit ? "Edit Hearing" : "Add Hearing"}</h2>
+                        <button type="button" onClick={onClose} className="p-1 rounded hover:bg-gray-200">
+                            <FiX className="w-5 h-5 text-black" />
                         </button>
                     </div>
 
+                    {/* Full Edit / Add Fields */}
                     {(!isEdit || (isEdit && allowFullEdit)) && (
                         <>
-                            <label className={`${text}`}>Case</label>
-                            <select
-                                value={form.caseId || ""}
-                                required
-                                onChange={(e) => update("caseId", e.target.value)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            >
+                            <label className="text-black">Case</label>
+                            <select value={form.caseId || ""} required onChange={e => update("caseId", e.target.value)} className={inputClass}>
                                 <option value="">Select Case</option>
-                                {cases?.map(c => (
-                                    <option key={c._id} value={c._id}>{c.caseTitle}</option>
-                                ))}
+                                {cases?.map(c => <option key={c._id} value={c._id}>{c.caseTitle}</option>)}
                             </select>
 
                             {userData?.role === "Law Firm" && (
                                 <>
-                                    <label className={`${text}`}>Sub Handler (Lawyer)</label>
-                                    <select
-                                        value={form.subHandler || ""}
-                                        onChange={(e) => update("subHandler", e.target.value)}
-                                        className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                                    >
+                                    <label className="text-black">Sub Handler (Lawyer)</label>
+                                    <select value={form.subHandler || ""} onChange={e => update("subHandler", e.target.value)} className={inputClass}>
                                         <option value="">Select Lawyer</option>
-                                        {lawyers?.map(l => (
-                                            <option key={l._id} value={l._id}>{l.fullName}</option>
-                                        ))}
+                                        {lawyers?.map(l => <option key={l._id} value={l._id}>{l.fullName}</option>)}
                                     </select>
                                 </>
                             )}
 
-                            <label className={`${text}`}>Title</label>
-                            <input
-                                type="text"
-                                value={form.title || ""}
-                                onChange={(e) => update("title", e.target.value)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                                required
-                            />
+                            <label className="text-black">Title</label>
+                            <input type="text" value={form.title || ""} onChange={e => update("title", e.target.value)} required className={inputClass} />
 
-                            <label className={`${text}`}>Description</label>
-                            <textarea
-                                value={form.description || ""}
-                                onChange={(e) => update("description", e.target.value)}
-                                rows={3}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            />
+                            <label className="text-black">Description</label>
+                            <textarea value={form.description || ""} onChange={e => update("description", e.target.value)} rows={3} className={inputClass} />
 
-                            <label className={`${text}`}>Start Time</label>
-                            <input
-                                type="datetime-local"
-                                value={form.startsAt || ""}
-                                min={minDateTime}
-                                onChange={(e) => update("startsAt", e.target.value)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                                required
-                            />
+                            <label className="text-black">Start Time</label>
+                            <input type="datetime-local" value={form.startsAt || ""} min={minDateTime} onChange={e => update("startsAt", e.target.value)} required className={inputClass} />
 
-                            <label className={`${text}`}>Court Location</label>
-                            <input
-                                type="text"
-                                value={form.courtLocation || ""}
-                                onChange={(e) => update("courtLocation", e.target.value)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                                required
-                            />
+                            <label className="text-black">Court Location</label>
+                            <input type="text" value={form.courtLocation || ""} onChange={e => update("courtLocation", e.target.value)} required className={inputClass} />
 
-                            <label className={`${text}`}>Reminder Offset (minutes)</label>
-                            <input
-                                type="number"
-                                value={form.reminderOffsetMinutes ?? 15}
-                                onChange={(e) => update("reminderOffsetMinutes", parseInt(e.target.value, 10) || 0)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            />
+                            <label className="text-black">Reminder Offset (minutes)</label>
+                            <input type="number" value={form.reminderOffsetMinutes ?? 15} onChange={e => update("reminderOffsetMinutes", parseInt(e.target.value, 10) || 0)} className={inputClass} />
 
-                            <label className={`${text} flex items-center gap-2`}>
-                                <input
-                                    type="checkbox"
-                                    checked={!!form.notify}
-                                    onChange={(e) => update("notify", e.target.checked)}
-                                />
+                            <label className="text-black flex items-center gap-2">
+                                <input type="checkbox" checked={!!form.notify} onChange={e => update("notify", e.target.checked)} />
                                 Notify
                             </label>
                         </>
                     )}
 
-                    {/* -------------------------
-               Restricted post-hearing / within 2 hours edits
-             ------------------------- */}
+                    {/* Restricted Edit */}
                     {isEdit && !allowFullEdit && (
                         <>
-                            <label className={`${text}`}>Title</label>
-                            <input
-                                type="text"
-                                value={form.title || ""}
-                                onChange={(e) => update("title", e.target.value)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            />
-
-                            <label className={`${text}`}>Description</label>
-                            <textarea
-                                value={form.description || ""}
-                                onChange={(e) => update("description", e.target.value)}
-                                rows={3}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            />
-
-                            <label className={`${text}`}>Duration (minutes)</label>
-                            <input
-                                type="number"
-                                value={form.durationMinutes ?? 60}
-                                onChange={(e) => update("durationMinutes", parseInt(e.target.value, 10) || 0)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            />
-
-                            <label className={`${text}`}>Reminder Offset (minutes)</label>
-                            <input
-                                type="number"
-                                value={form.reminderOffsetMinutes ?? 15}
-                                onChange={(e) => update("reminderOffsetMinutes", parseInt(e.target.value, 10) || 0)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            />
-
-                            <label className={`${text}`}>Progress</label>
-                            <select
-                                value={form.progress || "Scheduled"}
-                                onChange={(e) => update("progress", e.target.value)}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            >
+                            <label className="text-black">Title</label>
+                            <input type="text" value={form.title || ""} onChange={e => update("title", e.target.value)} className={inputClass} />
+                            <label className="text-black">Description</label>
+                            <textarea value={form.description || ""} onChange={e => update("description", e.target.value)} rows={3} className={inputClass} />
+                            <label className="text-black">Duration (minutes)</label>
+                            <input type="number" value={form.durationMinutes ?? 60} onChange={e => update("durationMinutes", parseInt(e.target.value, 10) || 0)} className={inputClass} />
+                            <label className="text-black">Reminder Offset (minutes)</label>
+                            <input type="number" value={form.reminderOffsetMinutes ?? 15} onChange={e => update("reminderOffsetMinutes", parseInt(e.target.value, 10) || 0)} className={inputClass} />
+                            <label className="text-black">Progress</label>
+                            <select value={form.progress || "Scheduled"} onChange={e => update("progress", e.target.value)} className={inputClass}>
                                 <option value="Scheduled">Scheduled</option>
                                 <option value="Adjourned">Adjourned</option>
                                 <option value="Completed">Completed</option>
                                 <option value="Cancelled">Cancelled</option>
                             </select>
-
-                            <label className={`${text}`}>Progress Details</label>
-                            <textarea
-                                value={form.progressDetails || ""}
-                                onChange={(e) => update("progressDetails", e.target.value)}
-                                rows={3}
-                                className={`w-full px-3 py-2 rounded-lg border ${inputClass}`}
-                            />
+                            <label className="text-black">Progress Details</label>
+                            <textarea value={form.progressDetails || ""} onChange={e => update("progressDetails", e.target.value)} rows={3} className={inputClass} />
                         </>
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex justify-between items-center gap-2 mt-4">
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
+                    <div className="flex flex-col md:flex-row justify-between gap-2 mt-4">
+                        <button type="submit" disabled={loading} className="flex-1 bg-black text-white py-2 rounded-lg hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                             {loading ? <FiLoader className="animate-spin" /> : (isEdit ? "Update Hearing" : "Add Hearing")}
                         </button>
 
                         {isEdit && (
-                            <button
-                                type="button"
-                                onClick={() => setShowDeleteConfirm(true)}
-                                className="flex items-center justify-center gap-2 bg-red-600 text-white py-2 px-3 rounded-lg hover:bg-red-700"
-                            >
+                            <button type="button" onClick={() => setShowDeleteConfirm(true)} className="flex items-center justify-center gap-2 bg-red-600 text-white py-2 px-3 rounded-lg hover:bg-red-700">
                                 <FiTrash2 /> Delete
                             </button>
                         )}
@@ -409,21 +310,11 @@ const HearingForm = ({ isOpen, onClose, hearingData = null, isEdit = false }) =>
                     {showDeleteConfirm && (
                         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
                             <div className="bg-white p-6 rounded-lg max-w-sm w-full flex flex-col gap-4">
-                                <h3 className="text-lg font-semibold">Delete Hearing?</h3>
-                                <p>Are you sure you want to delete this hearing?</p>
+                                <h3 className="text-lg font-semibold text-black">Delete Hearing?</h3>
+                                <p className="text-black">Are you sure you want to delete this hearing?</p>
                                 <div className="flex justify-end gap-2">
-                                    <button
-                                        onClick={() => setShowDeleteConfirm(false)}
-                                        className="px-3 py-2 rounded-lg bg-gray-300"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        onClick={handleDelete}
-                                        className="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
-                                    >
-                                        Delete
-                                    </button>
+                                    <button onClick={() => setShowDeleteConfirm(false)} className="px-3 py-2 rounded-lg bg-gray-300">Cancel</button>
+                                    <button onClick={handleDelete} className="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">Delete</button>
                                 </div>
                             </div>
                         </div>

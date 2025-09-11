@@ -8,10 +8,10 @@ import ClientForm from "@/Components/dashboard/Clients/ClientForm.jsx"
 import LawyerForm from "@/Components/dashboard/Lawyers/LawyerForm.jsx"
 
 export default function DashboardPage() {
-  const { Cases, theme, userData, Clients, Lawyers} = useApp()
+  const { Cases, userData, Clients, Lawyers } = useApp()
   const { lawyers } = Lawyers
   const { clients } = Clients
-  const {cases} = Cases
+  const { cases } = Cases
   const [modal, setModal] = useState({ open: false, type: "" })
 
   // Quick Action Handlers
@@ -20,7 +20,6 @@ export default function DashboardPage() {
   }
   const closeModal = () => setModal({ open: false, type: "" })
 
-  // 📌 Utility: check if created today
   const isToday = (dateStr) => {
     if (!dateStr) return false
     const today = new Date()
@@ -32,7 +31,6 @@ export default function DashboardPage() {
     )
   }
 
-  // 📌 Build recent activities (cases, clients, lawyers)
   const recentActivities = useMemo(() => {
     let activities = []
 
@@ -133,29 +131,29 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-8 p-6 md:p-8">
 
-        {/* Welcome Section */}
+        {/* Welcome */}
         <div className="space-y-2">
-          <h1 className={`text-3xl font-bold ${theme === "light" ? "text-gray-900" : "text-white"}`}>
+          <h1 className="text-3xl font-bold text-black">
             Welcome back, {userData?.fullName}!
           </h1>
-          <p className={`text-sm ${theme === "light" ? "text-gray-500" : "text-gray-300"}`}>
+          <p className="text-sm text-gray-500">
             Here's an overview of your legal practice management.
           </p>
         </div>
 
-        {/* Stats Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Stats */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {stats.map((stat, index) => {
             const Icon = stat.icon
             return (
-              <div key={index} className={`relative overflow-hidden rounded-xl p-6 shadow hover:shadow-lg transition-shadow ${theme === "light" ? "bg-white border border-gray-200" : "bg-gray-800 border border-gray-700"}`}>
+              <div key={index} className="relative overflow-hidden rounded-xl p-6 shadow hover:shadow-lg transition-shadow bg-white border border-gray-200">
                 <div className="flex items-center gap-4">
                   <div className={`p-3 rounded-lg bg-gradient-to-br ${stat.gradient} text-white`}>
                     <Icon className="h-6 w-6" />
                   </div>
                   <div>
-                    <p className={`text-sm font-medium ${theme === "light" ? "text-gray-500" : "text-gray-400"}`}>{stat.title}</p>
-                    <p className={`text-3xl font-bold mt-1 ${stat.color}`}>{stat.value}</p>
+                    <p className="text-sm font-medium text-gray-500">{stat.title}</p>
+                    <p className="text-3xl font-bold text-black mt-1">{stat.value}</p>
                   </div>
                 </div>
               </div>
@@ -165,26 +163,24 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div className="space-y-4">
-          <h2 className={`text-xl font-semibold ${theme === "light" ? "text-gray-900" : "text-white"}`}>Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <h2 className="text-xl font-semibold text-black">Quick Actions</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map((action, index) => {
               const Icon = action.icon
               return (
                 <button
                   key={index}
                   onClick={() => handleQuickAction(action.type)}
-                  className={`relative flex items-center gap-4 p-6 rounded-lg border transition-shadow hover:shadow-lg ${theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-700"}`}
+                  className="group relative flex items-center gap-4 p-6 rounded-lg border bg-white border-gray-200 hover:shadow-lg transition-shadow"
                 >
                   <div className={`${action.color} p-3 rounded-lg text-white`}>
                     <Icon className="h-6 w-6" />
                   </div>
                   <div className="text-left">
-                    <h3 className={`font-semibold ${theme === "light" ? "text-gray-900" : "text-white"}`}>{action.title}</h3>
-                    <p className={`text-sm ${theme === "light" ? "text-gray-500" : "text-gray-300"}`}>Click to add {action.type}</p>
+                    <h3 className="font-semibold text-black">{action.title}</h3>
+                    <p className="text-sm text-gray-500">Click to add {action.type}</p>
                   </div>
-                  <span className="absolute right-4 top-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <FiPlus className="h-5 w-5 text-gray-400" />
-                  </span>
+                  <FiPlus className="absolute right-4 top-4 h-5 w-5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </button>
               )
             })}
@@ -192,12 +188,12 @@ export default function DashboardPage() {
         </div>
 
         {/* Recent Activity */}
-        <div className={`rounded-lg p-6 shadow ${theme === "light" ? "bg-white border border-gray-200" : "bg-gray-800 border border-gray-700"}`}>
-          <h2 className={`text-xl font-semibold mb-4 ${theme === "light" ? "text-gray-900" : "text-white"}`}>Recent Activity</h2>
+        <div className="rounded-lg p-6 shadow bg-white border border-gray-200">
+          <h2 className="text-xl font-semibold mb-4 text-black">Recent Activity</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className={`text-sm ${theme === "light" ? "text-gray-500" : "text-gray-300"} border-b border-gray-200`}>
+                <tr className="text-sm text-gray-500 border-b border-gray-300">
                   <th className="py-2 px-4">Name</th>
                   <th className="py-2 px-4">Type</th>
                   <th className="py-2 px-4">Status</th>
@@ -205,23 +201,16 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {recentActivities.length > 0 ? (
-                  recentActivities.map((item) => (
-                    <tr
-                      key={item.id}
-                      className="hover:bg-gray-100"
-                    >
-                      <td className="py-2 px-4">{item.name}</td>
-                      <td className="py-2 px-4">{item.type}</td>
-                      <td className="py-2 px-4">{item.status}</td>
-                      <td className="py-2 px-4">{item.date}</td>
-                    </tr>
-                  ))
-                ) : (
+                {recentActivities.length > 0 ? recentActivities.map(item => (
+                  <tr key={item.id} className="hover:bg-gray-100">
+                    <td className="py-2 px-4">{item.name}</td>
+                    <td className="py-2 px-4">{item.type}</td>
+                    <td className="py-2 px-4">{item.status}</td>
+                    <td className="py-2 px-4">{item.date}</td>
+                  </tr>
+                )) : (
                   <tr>
-                    <td colSpan={4} className="py-4 text-center text-gray-400">
-                      No activities today.
-                    </td>
+                    <td colSpan={4} className="py-4 text-center text-gray-400">No activities today.</td>
                   </tr>
                 )}
               </tbody>
@@ -229,7 +218,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Quick Action Modals */}
+        {/* Modals */}
         {modal.open && modal.type === "case" && <CaseForm isOpen={modal.open} onClose={closeModal} />}
         {modal.open && modal.type === "client" && <ClientForm isOpen={modal.open} onClose={closeModal} />}
         {modal.open && modal.type === "lawyer" && <LawyerForm isOpen={modal.open} onClose={closeModal} />}

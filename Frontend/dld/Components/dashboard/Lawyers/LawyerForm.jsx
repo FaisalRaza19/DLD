@@ -6,27 +6,12 @@ import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input"
 import "react-phone-number-input/style.css"
 
 const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
-    const { addAlert, theme, Lawyers } = useApp()
+    const { addAlert, Lawyers } = useApp()
     const { addLawyer, editLawyer, setLawyers } = Lawyers
-
-    // Theme-based class helpers
-    const modalBg = theme === "light" ? "bg-white border border-gray-200" : "bg-gray-800 border border-gray-700"
-    const textColor = theme === "light" ? "text-gray-900" : "text-gray-100"
-    const mutedTextColor = theme === "light" ? "text-gray-500" : "text-gray-400"
-    const buttonPrimaryClass =
-        theme === "light"
-            ? "bg-blue-600 text-white hover:bg-blue-700"
-            : "bg-blue-500 text-white hover:bg-blue-400"
-    const inputClass =
-        theme === "light"
-            ? "bg-white border border-gray-300 text-gray-900"
-            : "bg-gray-700 border border-gray-600 text-gray-400"
-    const hoverAccentClass = theme === "light" ? "hover:bg-gray-100" : "hover:bg-gray-700"
 
     const [loading, setLoading] = useState(false)
     const [errors, setErrors] = useState({})
 
-    // Form state
     const [formData, setFormData] = useState({
         lawyerId: "",
         fullName: "",
@@ -51,18 +36,15 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
         }
     }, [isEdit, lawyerData])
 
-    // Handle input change
     const handleInputChange = (e) => {
         const { name, value } = e.target
         setFormData((prev) => ({ ...prev, [name]: value }))
     }
 
-    // Handle phone input change
     const handlePhoneChange = (value) => {
         setFormData((prev) => ({ ...prev, phoneNumber: value }))
     }
 
-    // Validation
     const validate = () => {
         let newErrors = {}
         if (!formData.fullName.trim()) newErrors.fullName = "Full name is required"
@@ -84,12 +66,12 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
         setLoading(true)
         try {
             if (isEdit) {
-                const updated = await editLawyer({formData})
+                const updated = await editLawyer({ formData })
                 if (updated.statusCode === 200) {
                     addAlert({ type: "success", message: "Lawyer updated successfully!" })
-                    setLawyers((prev =>
-                        prev.map(c => c._id === lawyerData._id ? updated.data : c)
-                    ))
+                    setLawyers((prev) =>
+                        prev.map((c) => (c._id === lawyerData._id ? updated.data : c))
+                    )
                     onClose()
                 } else {
                     addAlert({ type: "error", message: "Failed to update lawyer" })
@@ -97,7 +79,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
             } else {
                 const added = await addLawyer(formData)
                 if (added.statusCode === 200) {
-                    setLawyers(prev => [added.data, ...prev])
+                    setLawyers((prev) => [added.data, ...prev])
                     addAlert({ type: "success", message: "Lawyer added successfully!" })
                     onClose()
                 } else {
@@ -125,13 +107,13 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className={`${modalBg} rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto`}>
+            <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-lg">
                 {/* Header */}
-                <div className={`flex justify-between items-center p-6 border-b ${theme === "light" ? "border-gray-200" : "border-gray-700"}`}>
-                    <h2 className={`text-xl font-semibold ${textColor}`}>
+                <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                    <h2 className="text-xl font-semibold text-black">
                         {isEdit ? "Edit Lawyer" : "Add New Lawyer"}
                     </h2>
-                    <button onClick={onClose} className={`${mutedTextColor} hover:${textColor} transition-colors`}>
+                    <button onClick={onClose} className="text-gray-500 hover:text-black transition-colors">
                         <FiX className="h-6 w-6" />
                     </button>
                 </div>
@@ -141,7 +123,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* Full Name */}
                         <div>
-                            <label className={`block text-sm font-medium mb-2 ${textColor}`}>
+                            <label className="block text-sm font-medium mb-2 text-black">
                                 Full Name <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -149,7 +131,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
                                 name="fullName"
                                 value={formData.fullName}
                                 onChange={handleInputChange}
-                                className={`w-full px-3 py-2 rounded-lg ${inputClass}`}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black"
                                 placeholder="Enter lawyer's full name"
                                 required
                             />
@@ -158,7 +140,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
 
                         {/* Email */}
                         <div>
-                            <label className={`block text-sm font-medium mb-2 ${textColor}`}>
+                            <label className="block text-sm font-medium mb-2 text-black">
                                 Email Address <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -166,7 +148,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
                                 name="email"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className={`w-full px-3 py-2 rounded-lg ${inputClass}`}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black"
                                 placeholder="Enter email address"
                                 required
                             />
@@ -176,7 +158,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
 
                     {/* Phone Number */}
                     <div>
-                        <label className={`block text-sm font-medium mb-2 ${textColor}`}>
+                        <label className="block text-sm font-medium mb-2 text-black">
                             Phone Number <span className="text-red-500">*</span>
                         </label>
                         <PhoneInput
@@ -184,7 +166,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
                             defaultCountry="US"
                             value={formData.phoneNumber}
                             onChange={handlePhoneChange}
-                            className={`w-full ${inputClass} rounded-lg px-3 py-2`}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black"
                         />
                         {errors.phoneNumber && <p className="text-red-500 text-sm mt-1">{errors.phoneNumber}</p>}
                     </div>
@@ -192,13 +174,13 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
                     {/* Specialization & Experience */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className={`block text-sm font-medium mb-2 ${textColor}`}>Specialization</label>
+                            <label className="block text-sm font-medium mb-2 text-black">Specialization</label>
                             <select
                                 name="specialization"
                                 value={formData.specialization}
                                 onChange={handleInputChange}
                                 required
-                                className={`w-full px-3 py-2 rounded-lg ${inputClass}`}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black"
                             >
                                 <option value="">Select specialization</option>
                                 <option value="civil-law">Civil Law</option>
@@ -215,7 +197,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
                         </div>
 
                         <div>
-                            <label className={`block text-sm font-medium mb-2 ${textColor}`}>Years of Experience</label>
+                            <label className="block text-sm font-medium mb-2 text-black">Years of Experience</label>
                             <input
                                 type="number"
                                 name="experience"
@@ -224,7 +206,7 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
                                 min="0"
                                 max="50"
                                 required
-                                className={`w-full px-3 py-2 rounded-lg ${inputClass}`}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black"
                                 placeholder="Enter years of experience"
                             />
                             {errors.experience && <p className="text-red-500 text-sm mt-1">{errors.experience}</p>}
@@ -233,32 +215,32 @@ const LawyerForm = ({ isOpen, onClose, lawyerData = null, isEdit = false }) => {
 
                     {/* Address */}
                     <div>
-                        <label className={`block text-sm font-medium mb-2 ${textColor}`}>Address</label>
+                        <label className="block text-sm font-medium mb-2 text-black">Address</label>
                         <textarea
                             name="address"
                             value={formData.address}
                             onChange={handleInputChange}
                             rows={3}
-                            className={`w-full px-3 py-2 rounded-lg ${inputClass}`}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black"
                             placeholder="Enter lawyer's address"
                             required
                         />
                     </div>
 
                     {/* Footer */}
-                    <div className={`flex justify-end gap-4 pt-4 border-t ${theme === "light" ? "border-gray-200" : "border-gray-700"}`}>
+                    <div className="flex flex-col md:flex-row justify-end gap-4 pt-4 border-t border-gray-200">
                         <button
                             type="button"
                             onClick={onClose}
                             disabled={loading}
-                            className={`px-4 py-2 rounded-lg ${mutedTextColor} ${hoverAccentClass}`}
+                            className="px-4 py-2 rounded-lg border border-gray-400 text-black hover:bg-gray-100 transition-colors"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
-                            className={`px-6 py-2 rounded-lg flex items-center gap-2 ${buttonPrimaryClass}`}
+                            className="px-6 py-2 rounded-lg bg-black text-white flex items-center gap-2 hover:bg-gray-900 transition-colors"
                         >
                             {loading ? <><FiLoader className="animate-spin h-5 w-5" /> Saving...</> : isEdit ? "Update Lawyer" : "Add Lawyer"}
                         </button>
