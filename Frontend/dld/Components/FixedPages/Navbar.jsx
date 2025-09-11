@@ -114,21 +114,30 @@ const Navbar = () => {
                                 {item.label}
                             </Link>
                         ))}
-
-                        <div className="mt-3 flex gap-2 px-3">
-                            <button
-                                onClick={() => router.push("/login")}
-                                className="flex-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100"
+                        {isLoggedIn === true ? (
+                            <Link
+                                href="/dashboard"
+                                className="inline-flex p-3 items-center gap-2 rounded-md border border-emerald-600 px-3 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
                             >
-                                Login
-                            </button>
-                            <button
-                                onClick={() => router.push("/signUp")}
-                                className="flex-1 rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-emerald-500"
-                            >
-                                Sign Up
-                            </button>
-                        </div>
+                                <FiUser className="h-4 w-4" />
+                                Dashboard
+                            </Link>
+                        ) : (
+                            <div className="mt-3 flex gap-2 px-3">
+                                <button
+                                    onClick={() => router.push("/login")}
+                                    className="flex-1 rounded-md px-3 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-100"
+                                >
+                                    Login
+                                </button>
+                                <button
+                                    onClick={() => router.push("/signUp")}
+                                    className="flex-1 rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-emerald-500"
+                                >
+                                    Sign Up
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

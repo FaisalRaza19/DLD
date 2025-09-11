@@ -19,7 +19,7 @@ export default function MainLayout({ children }) {
         <div className="min-h-screen bg-white text-zinc-900 transition-colors duration-300">
             {/* The top loader will automatically handle loading progress on route changes */}
             <LoadingBar
-                color="#2563eb"
+                color="#000"
                 height={3}
                 showSpinner={false}
             />
