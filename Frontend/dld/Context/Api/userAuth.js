@@ -270,7 +270,7 @@ export const forgetPass = async ({ email }) => {
 // update pass word 
 export const updatePassword = async ({ new_pass, token }) => {
     try {
-        localStorage.removeItem("dld_user_token");
+        // localStorage.removeItem("dld_user_token");
         const response = await fetch(`${userAuth.update_pass}/${token}`, {
             method: "POST",
             headers: {
