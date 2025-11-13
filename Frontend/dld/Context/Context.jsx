@@ -52,6 +52,10 @@ export function AppProvider({ children }) {
 
     // Verify JWT
     const verifyToken = async () => {
+        const currentPath = window.location.pathname
+        if (currentPath.startsWith("/change-password/:token") || currentPath.startsWith("/email-verify")) {
+            return
+        }
         try {
             const data = await verifyJWT(setIsVerify)
             if (data.statusCode === 400 || data.message === "Token is invalid or expired") {
@@ -207,7 +211,7 @@ export function AppProvider({ children }) {
 
         // handle incoming unread chat messages
         socket.on("message", (msg) => {
-          setUnreadMessages(prev => [msg, ...prev])
+            setUnreadMessages(prev => [msg, ...prev])
         })
 
         socket.on("disconnect", () => console.log("Disconnected from Socket.IO server"))
@@ -227,13 +231,13 @@ export function AppProvider({ children }) {
     const Lawyers = { lawyers, setLawyers, addLawyer, editLawyer, delLawyer }
 
     const Hearings = {
-        hearings, setHearings, addHearing, editHearing, delHearing,notifications, setNotifications,
-        markNotificationRead, deleteNotification,unReadNotifications, setUnReadNotifications,
-        unreadMessages, setUnreadMessages,fetchNotifications
+        hearings, setHearings, addHearing, editHearing, delHearing, notifications, setNotifications,
+        markNotificationRead, deleteNotification, unReadNotifications, setUnReadNotifications,
+        unreadMessages, setUnreadMessages, fetchNotifications
     }
 
     const value = {
-        alerts, addAlert, removeAlert,userAuth, userProfile, verifyUser, userImage, userData, setUserData,
+        alerts, addAlert, removeAlert, userAuth, userProfile, verifyUser, userImage, userData, setUserData,
         Cases, Clients, Lawyers, Hearings
     }
 

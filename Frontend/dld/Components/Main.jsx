@@ -8,7 +8,7 @@ import Alerts from "./AuthPages/Alert";
 export default function MainLayout({ children }) {
     const pathName = usePathname();
 
-    const isChangePassPage = pathName.startsWith("/change-pas");
+    const isChangePassPage = pathName.startsWith("/change-password");
     const isDashboard = pathName.startsWith("/dashboard");
     const isAuth =
         ["/login", "/signUp", "/email-verify"].includes(pathName) ||
