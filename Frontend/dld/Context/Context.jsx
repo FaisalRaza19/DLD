@@ -53,7 +53,7 @@ export function AppProvider({ children }) {
     // Verify JWT
     const verifyToken = async () => {
         const currentPath = window.location.pathname
-        if (currentPath.startsWith("/change-password/:token") || currentPath.startsWith("/email-verify")) {
+        if (currentPath.startsWith("/change-password") || currentPath.startsWith("/email-verify")) {
             return
         }
         try {
