@@ -1,16 +1,15 @@
 # 📌 DLD – Digital Law & Legal Management Platform
 
-DLD is a **modern web application** designed for **lawyers, clients, and law firms** to efficiently manage cases, hearings, clients, and communication in one centralized platform. Built with the **MERN stack**, it provides a seamless and professional experience with advanced features like real-time notifications, scheduling, and secure communication.
+DLD is a **modern web application** designed for **lawyers, and law firms** to efficiently manage cases, hearings, clients, in one centralized platform. Built with the **MERN stack**, it provides a seamless and professional experience with advanced features like real-time notifications, and scheduling.
 
 ---
 
 ## ✨ Features
 
-- 👨‍⚖️ **User Management** – Separate dashboards for Lawyers, Clients, and Sub-Users  
+- 👨‍⚖️ **User Management** – Separate dashboards for Lawyers and Law Firms  
 - 📂 **Case Management** – Create, edit, track, and archive case files  
 - 📅 **Hearings Calendar** – Schedule & manage hearings with local-time reminders (Agenda jobs)  
 - 🔔 **Notifications** – Real-time updates for cases, hearings, and user activities  
-- 💬 **Real-Time Chat** – Secure lawyer-client communication (Socket.IO)  
 - 📑 **Document Handling** – Upload, preview, and manage case-related documents  
 - 🌍 **Timezone Support** – Automatic hearing reminders adjusted to the user’s local time  
 - 🔒 **Authentication & Security** – JWT-based authentication & role-based access  
